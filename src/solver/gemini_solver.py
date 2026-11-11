@@ -1,663 +1,378 @@
-"""
-Gemini AI solver — production-grade wrapper around google-genai.
-
-Design goals:
-- Only REAL model names (verified against Google AI Studio).
-- Circuit breaker prevents hammering a dead API.
-- Every call has a timeout (no hanging).
-- Typed exceptions for clear error handling.
-- Structured JSON outputs via response_schema where possible.
-- Centralized cost tracking for analytics.
-- Screenshot support for vision tasks (code from image, financial quizzes).
-
-Public API:
-    solver = GeminiSolver()
-    if solver.is_configured:
-        code   = await solver.solve_code_task(instruction, current_code, "python")
-        idx    = await solver.solve_quiz_question(q_text, options)
-        result = await solver.solve_financial_image(image_path)
-        guide  = await solver.analyze_screen(screenshot_path, page_text)
-"""
-from __future__ import annotations
-
-import asyncio
+import os
 import json
 import re
-import time
-from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any
+from typing import Optional, List, Dict, Any
+from google import genai
+from google.genai import types
+from PIL import Image
 
-from src.config import settings
-from src.core.logger import get_logger
-from src.core.exceptions import QureoBotError
-
-log = get_logger(__name__)
-
-# ---------------------------------------------------------------------------
-# Optional dependency (google-genai)
-# ---------------------------------------------------------------------------
-
-try:
-    from google import genai
-    from google.genai import types
-    from google.genai.errors import APIError as _GenAIAPIError
-    _GENAI_AVAILABLE = True
-except ImportError:  # pragma: no cover
-    _GENAI_AVAILABLE = False
-    _GenAIAPIError = Exception  # type: ignore
-    log.warning("google_genai_not_installed", note="Install with: pip install google-genai")
-
-
-# ---------------------------------------------------------------------------
-# Constants
-# ---------------------------------------------------------------------------
-
-# Ordered fallback chain — from fastest/most capable to cheapest.
-# These are the ONLY models Google currently (2025) exposes for
-# generate_content. Older/other names cause 404s.
-_MODEL_CHAIN: tuple[str, ...] = (
-    "gemini-2.5-flash",
-    "gemini-2.0-flash",
-    "gemini-1.5-flash",
-    "gemini-1.5-flash-8b",  # cheapest fallback
-)
-
-# Per-call timeout (seconds). Gemini Flash typically responds in <4s for text,
-# <10s for vision. Anything beyond 25s means the API is degraded.
-_CALL_TIMEOUT_SEC = 25.0
-
-# Total tries across the whole model chain (not per model).
-_MAX_TOTAL_ATTEMPTS = 6
-
-# Circuit breaker: after N consecutive failures, stop calling Gemini for
-# `cooldown` seconds (prevents quota burn on transient outages).
-_BREAKER_THRESHOLD = 4
-_BREAKER_COOLDOWN_SEC = 90.0
-
-
-# ---------------------------------------------------------------------------
-# Exceptions
-# ---------------------------------------------------------------------------
-
-class GeminiNotConfiguredError(QureoBotError):
-    """Raised when API key is missing/invalid."""
-
-
-class GeminiCircuitOpenError(QureoBotError):
-    """Raised when circuit breaker is open (quota exhausted / API down)."""
-
-
-class GeminiResponseError(QureoBotError):
-    """Raised when Gemini returns an unusable response."""
-
-
-class GeminiTimeoutError(QureoBotError):
-    """Raised when a call exceeds the timeout."""
-
-
-# ---------------------------------------------------------------------------
-# Circuit breaker
-# ---------------------------------------------------------------------------
-
-@dataclass
-class CircuitBreaker:
-    threshold: int = _BREAKER_THRESHOLD
-    cooldown: float = _BREAKER_COOLDOWN_SEC
-    failures: int = 0
-    opened_at: float = 0.0
-
-    @property
-    def is_open(self) -> bool:
-        if self.failures < self.threshold:
-            return False
-        if time.monotonic() - self.opened_at > self.cooldown:
-            # Cooldown expired — allow one probe
-            self.failures = 0
-            return False
-        return True
-
-    def record_failure(self) -> None:
-        self.failures += 1
-        if self.failures >= self.threshold:
-            self.opened_at = time.monotonic()
-            log.warning(
-                "gemini_circuit_opened",
-                failures=self.failures,
-                cooldown_sec=self.cooldown,
-            )
-
-    def record_success(self) -> None:
-        if self.failures > 0:
-            log.info("gemini_circuit_recovered", previous_failures=self.failures)
-        self.failures = 0
-
-
-# ---------------------------------------------------------------------------
-# Cost tracking (approximate — for analytics only)
-# ---------------------------------------------------------------------------
-
-@dataclass
-class UsageStats:
-    """Best-effort usage tracking (no exact token counts available)."""
-    calls: int = 0
-    failures: int = 0
-    total_latency_ms: int = 0
-    by_model: dict[str, int] = field(default_factory=dict)
-
-    def record(self, model: str, latency_ms: int, ok: bool) -> None:
-        self.calls += 1
-        self.total_latency_ms += latency_ms
-        if not ok:
-            self.failures += 1
-        self.by_model[model] = self.by_model.get(model, 0) + 1
-
-    @property
-    def avg_latency_ms(self) -> int:
-        return self.total_latency_ms // self.calls if self.calls else 0
-
-
-# ---------------------------------------------------------------------------
-# Solver
-# ---------------------------------------------------------------------------
 
 class GeminiSolver:
-    """Gemini wrapper — one instance per process (thread-safe reads)."""
+    """مساعد الذكاء الاصطناعي لحل تمارين وكويزات منصة كيريو البرمجية"""
 
-    def __init__(self, api_key: str | None = None) -> None:
-        self._api_key = (api_key or settings.gemini_api_key or "").strip()
-        self._client = None
-        self._breaker = CircuitBreaker()
-        self.usage = UsageStats()
+    def __init__(self, api_key: Optional[str] = None):
+        self.api_key = api_key or os.getenv("GEMINI_API_KEY", "")
+        self.client = None
+        # قائمة النماذج حسب التوفر والسرعة العالية
+        self.preferred_models = [
+            "gemini-2.5-flash",
+            "gemini-2.0-flash",
+            "gemini-1.5-flash",
+            "gemini-3.1-flash-lite",
+            "gemini-3.5-flash-lite",
+            "gemini-flash-lite-latest",
+            "gemini-3.8-flash"
+        ]
+        if self.api_key:
+            self._init_client()
 
-        if self._api_key and _GENAI_AVAILABLE:
-            self._build_client()
+    def set_api_key(self, api_key: str):
+        """تحديث مفتاح API ديناميكياً"""
+        self.api_key = api_key.strip()
+        self._init_client()
 
-    # ------------------------------------------------------------------
-    # Setup
-    # ------------------------------------------------------------------
-
-    def _build_client(self) -> None:
+    def _init_client(self):
         try:
-            self._client = genai.Client(api_key=self._api_key)
-            log.info(
-                "gemini_client_ready",
-                key_preview=self._mask(self._api_key),
-                models=list(_MODEL_CHAIN),
-            )
+            self.client = genai.Client(api_key=self.api_key)
         except Exception as e:
-            self._client = None
-            log.error("gemini_client_init_failed", error=str(e))
+            print(f"Error initializing Gemini client: {e}")
+            self.client = None
 
-    @staticmethod
-    def _mask(key: str) -> str:
-        return f"{key[:6]}...{key[-4:]}" if len(key) > 12 else "***"
-
-    @property
     def is_configured(self) -> bool:
         return bool(
-            self._client is not None
-            and _GENAI_AVAILABLE
-            and len(self._api_key) > 15
+            self.client
+            and self.api_key
+            and self.api_key != "YOUR_GEMINI_API_KEY_HERE"
+            and len(self.api_key) > 15
         )
 
-    @property
-    def is_available(self) -> bool:
-        """True if we can currently attempt a call (breaker not open)."""
-        return self.is_configured and not self._breaker.is_open
-
-    def set_api_key(self, key: str) -> None:
-        """Hot-reload the API key (used by admin / gemini key handler)."""
-        self._api_key = key.strip()
-        self._breaker = CircuitBreaker()
-        if self._api_key and _GENAI_AVAILABLE:
-            self._build_client()
-
-    # ------------------------------------------------------------------
-    # Low-level: single attempt with timeout
-    # ------------------------------------------------------------------
-
-    async def _attempt(
-        self,
-        model: str,
-        contents: list[Any],
-        response_schema: Any | None = None,
-    ) -> str | None:
-        """
-        One single attempt with a specific model. Returns text or None.
-        Raises GeminiTimeoutError only for timeouts.
-        """
-        if self._client is None:
-            raise GeminiNotConfiguredError("Gemini client is not initialized")
-
-        config = None
-        if response_schema is not None:
+    async def generate_response(self, prompt: str) -> str:
+        """توليد رد نصي عام من Gemini لأي سؤال أو استفسار تعليمي"""
+        if not self.is_configured():
+            return ""
+        for model_name in self.preferred_models:
             try:
-                config = types.GenerateContentConfig(
-                    response_mime_type="application/json",
-                    response_schema=response_schema,
+                response = self.client.models.generate_content(
+                    model=model_name,
+                    contents=[prompt]
                 )
-            except Exception as e:
-                log.warning("gemini_schema_config_failed", error=str(e))
-
-        started = time.monotonic()
-        try:
-            coro = asyncio.to_thread(
-                self._client.models.generate_content,
-                model=model,
-                contents=contents,
-                config=config,
-            )
-            response = await asyncio.wait_for(coro, timeout=_CALL_TIMEOUT_SEC)
-        except asyncio.TimeoutError as e:
-            latency = int((time.monotonic() - started) * 1000)
-            self.usage.record(model, latency, ok=False)
-            log.warning("gemini_timeout", model=model, timeout_sec=_CALL_TIMEOUT_SEC)
-            raise GeminiTimeoutError(f"Gemini call timed out after {_CALL_TIMEOUT_SEC}s") from e
-
-        latency = int((time.monotonic() - started) * 1000)
-        text = getattr(response, "text", "") if response else ""
-
-        if not text:
-            self.usage.record(model, latency, ok=False)
-            return None
-
-        self.usage.record(model, latency, ok=True)
-        return text.strip()
-
-    # ------------------------------------------------------------------
-    # Retry chain across models
-    # ------------------------------------------------------------------
-
-    async def _generate(
-        self,
-        contents: list[Any],
-        response_schema: Any | None = None,
-    ) -> str:
-        """
-        Try each model in the chain until one succeeds.
-        Applies exponential backoff between models.
-        Raises GeminiCircuitOpenError if breaker is open.
-        """
-        if not self.is_configured:
-            raise GeminiNotConfiguredError("GEMINI_API_KEY is missing or invalid")
-        if self._breaker.is_open:
-            raise GeminiCircuitOpenError(
-                "Gemini circuit is open (quota exhausted or API degraded). "
-                "Try again in a minute."
-            )
-
-        last_error: Exception | None = None
-        attempts = 0
-
-        for model in _MODEL_CHAIN:
-            if attempts >= _MAX_TOTAL_ATTEMPTS:
-                break
-            attempts += 1
-
-            try:
-                text = await self._attempt(model, contents, response_schema)
-                if text:
-                    self._breaker.record_success()
-                    log.debug("gemini_success", model=model)
-                    return text
-                # Empty text — treat as soft failure, try next model
-                log.warning("gemini_empty_response", model=model)
-            except GeminiTimeoutError as e:
-                last_error = e
-                self._breaker.record_failure()
-                # Do not retry timeouts immediately — move to next model
+                if response and response.text:
+                    return response.text.strip()
+            except Exception:
                 continue
-            except _GenAIAPIError as e:
-                last_error = e
-                self._breaker.record_failure()
-                msg = str(e).lower()
-                # 429 = quota — no point retrying other models
-                if "429" in msg or "quota" in msg or "resource_exhausted" in msg:
-                    log.error("gemini_quota_exhausted", model=model)
-                    raise GeminiCircuitOpenError("Gemini quota exhausted") from e
-                # 400 = bad request — try next model anyway
-                log.warning("gemini_api_error", model=model, error=str(e))
-                await asyncio.sleep(0.4 * attempts)
-            except Exception as e:
-                last_error = e
-                self._breaker.record_failure()
-                log.warning("gemini_unexpected_error", model=model, error=str(e))
-                await asyncio.sleep(0.3 * attempts)
-
-        raise GeminiResponseError(
-            f"All Gemini models failed. Last error: {last_error}"
-        )
-
-    # ------------------------------------------------------------------
-    # Image handling
-    # ------------------------------------------------------------------
-
-    @staticmethod
-    def _image_part(path: str | None) -> Any | None:
-        if not path:
-            return None
-        p = Path(path)
-        if not p.exists():
-            log.warning("gemini_image_missing", path=path)
-            return None
-        try:
-            data = p.read_bytes()
-            mime = "image/jpeg" if p.suffix.lower() in (".jpg", ".jpeg") else "image/png"
-            return types.Part.from_bytes(data=data, mime_type=mime)
-        except Exception as e:
-            log.warning("gemini_image_read_failed", path=path, error=str(e))
-            return None
-
-    @staticmethod
-    def _extract_code(text: str) -> str:
-        """Strip markdown fences if present."""
-        if "```" not in text:
-            return text.strip()
-        m = re.search(
-            r"```(?:python|javascript|js|py)?\s*\n?(.*?)```",
-            text,
-            re.DOTALL | re.IGNORECASE,
-        )
-        return m.group(1).strip() if m else text.strip()
-
-    @staticmethod
-    def _extract_json(text: str) -> dict[str, Any] | None:
-        """Robust JSON extraction (handles trailing text, markdown)."""
-        if not text:
-            return None
-        # Strip fences if present
-        m = re.search(r"```(?:json)?\s*\n?(.*?)```", text, re.DOTALL)
-        candidate = m.group(1).strip() if m else text.strip()
-        # Try direct parse first
-        try:
-            return json.loads(candidate)
-        except json.JSONDecodeError:
-            pass
-        # Find outermost {...}
-        m2 = re.search(r"\{.*\}", candidate, re.DOTALL)
-        if m2:
-            try:
-                return json.loads(m2.group(0))
-            except json.JSONDecodeError:
-                pass
-        return None
-
-    # ------------------------------------------------------------------
-    # Public API — code solving
-    # ------------------------------------------------------------------
+        return ""
 
     async def solve_code_task(
         self,
         instruction: str,
         current_code: str = "",
         language: str = "python",
-        screenshot_path: str | None = None,
+        screenshot_path: Optional[str] = None
     ) -> str:
-        """
-        Solve a programming exercise.
-        Returns the CLEAN code ready to paste into the editor.
-        Raises GeminiResponseError if no valid code could be produced.
-        """
-        lang = language.lower()
-        if lang not in ("python", "javascript", "js"):
-            lang = "python"
+        """حل تمرين برمجي (بايثون أو جافاسكريبت) بناءً على التعليمات والصورة"""
+        if not self.is_configured():
+            raise ValueError("مفتاح Gemini API غير معين! يرجى إدخال المفتاح أولاً.")
 
-        prompt = (
-            f"You are an expert {lang} programmer solving a Qureo exercise.\n"
-            f"Instructions: {instruction.strip()}\n\n"
-            f"Current code:\n```{lang}\n{current_code.strip()}\n```\n\n"
-            "Return ONLY the complete corrected code. "
-            "No explanation. No markdown fences. No comments unless required by the task."
-        )
+        prompt = f"""
+أنت خبير برمجي في منصة Qureo التعليمية.
+المهمة: حل التمرين البرمجي بلغة ({language}).
 
-        contents: list[Any] = [prompt]
-        img = self._image_part(screenshot_path)
-        if img is not None:
-            contents.append(img)
+التعليمات المطلوبة من الطالب:
+{instruction}
 
-        raw = await self._generate(contents)
-        code = self._extract_code(raw)
+الكود الموجود حالياً في المحرر (إن وجد):
+```{language}
+{current_code}
+```
 
-        if not code.strip():
-            raise GeminiResponseError("Gemini returned empty code")
+المطلوب:
+1. اكتب الكود الكامل أو التعديل المطلوب بدقة 100% ليجتاز الاختبار.
+2. لا تكتب أي شرح أو مقدمات إطلاقاً.
+3. اكتب الكود البرمجي فقط داخل صيغة كود نظيفة بدون أي كلام زائد، لأن الكود سيتم نسخه ولصقه في المحرر آلياً.
+"""
+        contents: List[Any] = [prompt]
 
-        log.debug("gemini_code_solved", lang=lang, length=len(code))
-        return code
+        if screenshot_path and Path(screenshot_path).exists():
+            try:
+                with open(screenshot_path, "rb") as f:
+                    img_bytes = f.read()
+                part = types.Part.from_bytes(data=img_bytes, mime_type="image/png")
+                contents.append(part)
+            except Exception as e:
+                print(f"Warning: could not load image {screenshot_path}: {e}")
 
-    # ------------------------------------------------------------------
-    # Public API — quiz solving
-    # ------------------------------------------------------------------
+        # محاولة الاستدعاء بالنماذج المتاحة
+        last_error = None
+        for model_name in self.preferred_models:
+            try:
+                response = self.client.models.generate_content(
+                    model=model_name,
+                    contents=contents
+                )
+                if response and response.text:
+                    cleaned_code = self._clean_code_output(response.text)
+                    return cleaned_code
+            except Exception as e:
+                last_error = e
+                continue
+
+        raise RuntimeError(f"فشل استدعاء Gemini: {last_error}")
 
     async def solve_quiz_question(
         self,
         question: str,
-        options: list[str],
-        screenshot_path: str | None = None,
+        options: List[str],
+        screenshot_path: Optional[str] = None
     ) -> int:
-        """
-        Pick the correct option index for a multiple-choice question.
+        """حل سؤال اختيار من متعدد وتحديد رقم الخيار الصحيح (0-indexed)"""
+        if not self.is_configured():
+            raise ValueError("مفتاح Gemini API غير معين! يرجى إدخال المفتاح أولاً.")
 
-        Returns 0..len(options)-1.
-        Raises GeminiResponseError if the answer cannot be determined —
-        DO NOT default to 0 (that would submit a wrong answer knowingly).
-        """
-        if not options:
-            raise GeminiResponseError("No options provided")
-        if not self.is_available:
-            raise GeminiCircuitOpenError("Gemini unavailable — cannot solve quiz")
+        options_text = "\n".join([f"{i}. {opt}" for i, opt in enumerate(options)])
+        prompt = f"""
+أنت مساعد ذكي لحل اختبارات منصة Qureo التعليمية.
+أجب عن سؤال الاختيار من متعدد التالي باختيار رقم الإجابة الصحيحة فقط (0, 1, 2, ...):
 
-        opts_text = "\n".join(f"{i}. {opt}" for i, opt in enumerate(options))
-        prompt = (
-            "You are an expert educator solving a multiple-choice question from a "
-            "learning platform. Analyze carefully and pick the SINGLE correct option.\n\n"
-            f"Question:\n{question.strip()}\n\n"
-            f"Options:\n{opts_text}\n\n"
-            f"Respond with JSON only: "
-            f'{{"correct_index": <integer 0..{len(options)-1}>, '
-            f'"reason": "<one sentence>"}}'
-        )
+السؤال:
+{question}
 
-        contents: list[Any] = [prompt]
-        img = self._image_part(screenshot_path)
-        if img is not None:
-            contents.append(img)
+الخيارات المتاحة:
+{options_text}
 
-        raw = await self._generate(contents)
-        data = self._extract_json(raw)
+المطلوب منك إرجاع كائن JSON فقط بالصيغة التالية:
+{{"correct_index": 0, "reason": "شرح سريع باللغة العربية"}}
+"""
+        contents: List[Any] = [prompt]
 
-        if data is not None:
-            idx = data.get("correct_index")
-            if isinstance(idx, int) and 0 <= idx < len(options):
-                log.debug("gemini_quiz_solved", index=idx, reason=data.get("reason", ""))
-                return idx
+        if screenshot_path and Path(screenshot_path).exists():
+            try:
+                with open(screenshot_path, "rb") as f:
+                    img_bytes = f.read()
+                part = types.Part.from_bytes(data=img_bytes, mime_type="image/png")
+                contents.append(part)
+            except Exception as e:
+                print(f"Warning: could not load image {screenshot_path}: {e}")
 
-        # Fallback: search for a digit at the start of the response
-        m = re.search(r"\b(\d+)\b", raw or "")
-        if m:
-            candidate = int(m.group(1))
-            if 0 <= candidate < len(options):
-                log.warning("gemini_quiz_solved_via_digit_fallback", index=candidate)
-                return candidate
+        for model_name in self.preferred_models:
+            try:
+                response = self.client.models.generate_content(
+                    model=model_name,
+                    contents=contents
+                )
+                if response and response.text:
+                    text = response.text.strip()
+                    # استخراج JSON من الرد
+                    match = re.search(r'\{.*\}', text, re.DOTALL)
+                    if match:
+                        data = json.loads(match.group(0))
+                        idx = int(data.get("correct_index", 0))
+                        if 0 <= idx < len(options):
+                            return idx
+                    # إذا لم يكن JSON صريحاً، ابحث عن رقم
+                    digits = re.findall(r'\d+', text)
+                    if digits:
+                        d = int(digits[0])
+                        if 0 <= d < len(options):
+                            return d
+                    return 0
+            except Exception as e:
+                continue
 
-        raise GeminiResponseError(
-            f"Could not parse Gemini quiz response: {raw[:120]!r}"
-        )
+        return 0
 
-    # ------------------------------------------------------------------
-    # Public API — screen analysis (browser automation)
-    # ------------------------------------------------------------------
-
-    async def analyze_screen(
+    async def analyze_screen_and_guide(
         self,
         screenshot_path: str,
-        page_text: str = "",
-    ) -> dict[str, Any]:
-        """
-        Analyze a Qureo screen and recommend the next action.
+        additional_context: str = ""
+    ) -> Dict[str, Any]:
+        """تحليل لقطة شاشة من منصة Qureo لفهم حالة الشاشة والخطوة التالية"""
+        if not self.is_configured():
+            raise ValueError("مفتاح Gemini API غير معين.")
 
-        Returns dict with:
-            page_type:  chapter_map | dashboard | code_task | quiz | dialogue | completed | unknown
-            solution_code: str | None
-            next_button: str | None
-            summary: str
-        """
-        if not self.is_available:
-            raise GeminiCircuitOpenError("Gemini unavailable — cannot analyze screen")
+        if not Path(screenshot_path).exists():
+            return {"error": "Screenshot file does not exist"}
 
-        prompt = (
-            "You are an autonomous agent operating the Qureo learning platform. "
-            "Analyze the screenshot and decide the next action.\n\n"
-            f"Page text (partial):\n{page_text[:1200]}\n\n"
-            "Determine the page type from these values:\n"
-            "- chapter_map : list of lessons/chapters\n"
-            "- dashboard   : course home with a 'Start' button\n"
-            "- code_task   : editor + run button\n"
-            "- quiz        : multiple-choice question\n"
-            "- dialogue    : instruction / robot dialogue requiring 'Next'\n"
-            "- completed   : success screen ('Great job!', 'Next level')\n"
-            "- unknown     : none of the above\n\n"
-            "If code_task: provide the correct code in solution_code.\n"
-            "If dialogue / dashboard / chapter_map: provide the button text in next_button.\n\n"
-            "Respond with JSON only:\n"
-            '{"page_type":"...", "summary":"...", "solution_code":null, '
-            '"next_button":null, "is_passed": false}'
-        )
+        prompt = f"""
+أنت المساعد الذكي الآلي لمنصة Qureo التعليمية للبرمجة (Python / JavaScript).
+السياق الإضافي للنصوص في الصفحة: {additional_context}
 
-        contents: list[Any] = [prompt]
-        img = self._image_part(screenshot_path)
-        if img is not None:
-            contents.append(img)
+حلل لقطة الشاشة بدقة عالية وأخبرني:
+1. نوع الصفحة الحالية ("page_type"):
+   - "chapter_map": قائمة الفصول والدروس (مثل شاشة اختيار الفصل 3 وبطاقات الدروس مثل 'إسناد القيم إلى المتغيرات' أو 'التدرب على المتغيرات').
+   - "dashboard": الشاشة الرئيسية للمسار التي تحتوي على زر 'بدء التعلم' أو 'ابدأ'.
+   - "code_task": شاشة تمرين برمجي ومحرر كود لتنفيذ المطلوب وتشغيله.
+   - "quiz": سؤال اختيار من متعدد (اختبار الفهم).
+   - "dialogue": حوار لشخصية الروبوت أو نافذة تعليمات تتطلب الضغط على 'التالي' أو النقر للمتابعة.
+   - "completed": نافذة إكمال المستوى بنجاح وظهور عبارات مثل 'أحسنت' أو 'تهانينا' أو 'المستوى التالي'.
+2. إذا كانت شاشة قائمة الدروس (chapter_map):
+   - حدد اسم الدرس التالي غير المكتمل (الذي لا توجد بجانبه علامة صح رمادية أو خضراء ✓) وضعه في "next_button" بدقة.
+3. إذا كانت شاشة تمرين كود (code_task):
+   - اكتب الكود البرمجي الصحيح 100% المطلوب وضعه في المحرر في "solution_code".
+   - حدد زر التشغيل ("تشغيل") في "next_button".
+4. ما هو الزر المطلوب النقر عليه للانتقال للخطوة التالية في "next_button"؟
 
-        raw = await self._generate(contents)
-        data = self._extract_json(raw)
+أرجع النتيجة بصيغة JSON فقط:
+{{
+    "page_type": "chapter_map | code_task | dashboard | quiz | dialogue | completed | unknown",
+    "summary": "ملخص باللغة العربية للوضع الحالي في الشاشة",
+    "solution_code": "الكود المقترح إن وجد أو null",
+    "next_button": "اسم الزر أو الدرس المطلوب النقر عليه إن وجد أو null",
+    "is_passed": true/false
+}}
+"""
+        contents: List[Any] = [prompt]
+        if screenshot_path and Path(screenshot_path).exists():
+            try:
+                with open(screenshot_path, "rb") as f:
+                    img_bytes = f.read()
+                part = types.Part.from_bytes(data=img_bytes, mime_type="image/png")
+                contents.append(part)
+            except Exception as e:
+                print(f"Warning loading screenshot in analyze: {e}")
 
-        if not data:
-            return {
-                "page_type": "unknown",
-                "summary": (raw or "")[:200],
-                "solution_code": None,
-                "next_button": None,
-                "is_passed": False,
-            }
+        for model_name in self.preferred_models:
+            try:
+                response = self.client.models.generate_content(
+                    model=model_name,
+                    contents=contents
+                )
+                if response and response.text:
+                    text = response.text.strip()
+                    match = re.search(r'\{.*\}', text, re.DOTALL)
+                    if match:
+                        return json.loads(match.group(0))
+                    return {"summary": text, "page_type": "unknown"}
+            except Exception as e:
+                continue
 
-        # Normalize
-        data.setdefault("page_type", "unknown")
-        data.setdefault("summary", "")
-        data.setdefault("solution_code", None)
-        data.setdefault("next_button", None)
-        data.setdefault("is_passed", False)
+        return {"error": "تعذر تحليل الشاشة عبر الذكاء الاصطناعي"}
 
-        # Clean up code if provided
-        if data.get("solution_code"):
-            data["solution_code"] = self._extract_code(str(data["solution_code"]))
+    def _clean_code_output(self, text: str) -> str:
+        """تنظيف الكود المرتجع من أي نصوص أو markdown زائدة"""
+        text = text.strip()
+        # إزالة وسوم الماركدوان ```python ... ```
+        if "```" in text:
+            pattern = r"```(?:python|javascript|js)?\n?(.*?)```"
+            matches = re.findall(pattern, text, re.DOTALL | re.IGNORECASE)
+            if matches:
+                return matches[0].strip()
+        return text
 
-        return data
-
-    # ------------------------------------------------------------------
-    # Public API — financial literacy
-    # ------------------------------------------------------------------
-
-    async def solve_financial_image(
+    async def solve_financial_literacy_image(
         self,
         image_path: str,
-    ) -> dict[str, Any]:
+        additional_prompt: str = ""
+    ) -> Dict[str, Any]:
         """
-        Solve a financial literacy question from a photo.
-
-        Returns:
-            {
-              question: str,
-              options: list[str],
-              correct_index: int,
-              correct_answer: str,
-              explanation: str,
-              topic: str
-            }
-        Raises GeminiResponseError on parse failure.
+        تحليل وحل سؤال من منصة الثقافة المالية من صورة أو لقطة شاشة مرسلة بالذكاء الاصطناعي
+        تستخرج نص السؤال، الخيارات، الإجابة الصحيحة بدقة 100% مع التفسير العلمي المالي
         """
-        if not self.is_available:
-            raise GeminiCircuitOpenError("Gemini unavailable")
-        img = self._image_part(image_path)
-        if img is None:
-            raise GeminiResponseError("Image could not be loaded")
+        if not self.is_configured():
+            raise ValueError("مفتاح Gemini API غير معين! يرجى إدخال المفتاح أولاً.")
 
-        prompt = (
-            "You are a financial literacy teacher. Read the question in the image "
-            "and provide the correct answer with a short educational explanation.\n\n"
-            "Respond with JSON only:\n"
-            "{\n"
-            '  "question": "<exact Arabic text of the question>",\n'
-            '  "options": ["<opt1>", "<opt2>", "<opt3>", "<opt4>"],\n'
-            '  "correct_index": <0..3>,\n'
-            '  "correct_answer": "<exact text of correct option>",\n'
-            '  "explanation": "<2-3 sentences in Arabic>",\n'
-            '  "topic": "<short topic in Arabic>"\n'
-            "}"
-        )
+        if not Path(image_path).exists():
+            return {"error": "ملف الصورة غير موجود"}
 
-        raw = await self._generate([prompt, img])
-        data = self._extract_json(raw)
+        prompt = f"""
+أنت معلم وخبير معتمد في مادة "الثقافة المالية" (Financial Literacy) لطلاب المرحلة الثانوية (الصف الثاني الثانوي).
+المطلوب منك:
+1. قراءة وتحليل صورة السؤال المالي المرفقة بدقة بالغة.
+2. استخراج نص السؤال كاملاً كما هو باللغة العربية.
+3. استخراج جميع الخيارات أو البدائل المتاحة (A, B, C, D أو 1, 2, 3, 4).
+4. تحديد الإجابة الصحيحة 100% وفق المناهج التعليمية للثقافة المالية (المفاهيم: الميزانية الشخصية، الادخار، الاستثمار، البنوك، الشيكات، المعاملات الإلكترونية، بطاقات الائتمان، إدارة الديون، التضخم، حقوق المستهلك).
+5. كتابة شرح وتفسير مالي مبسط يوضح سبب اختيار هذه الإجابة.
+{additional_prompt}
 
-        if not data or "correct_answer" not in data:
-            raise GeminiResponseError(
-                f"Could not extract financial answer: {(raw or '')[:120]!r}"
-            )
+أرجع النتيجة بصيغة JSON فقط:
+{{
+    "question": "نص السؤال المستخرج بدقة",
+    "options": ["الخيار الأول", "الخيار الثاني", "الخيار الثالث", "الخيار الرابع"],
+    "correct_index": 0,
+    "correct_answer": "نص الإجابة الصحيحة الكامل",
+    "explanation": "شرح وتفسير تعليمي يوضح لماذا هذه الإجابة هي الصحيحة",
+    "topic": "الموضوع المالي (مثال: الادخار / الاستثمار / البنوك / الميزانية)"
+}}
+"""
+        contents: List[Any] = [prompt]
+        try:
+            with open(image_path, "rb") as f:
+                img_bytes = f.read()
+            # استنتاج نوع MIME للصورة
+            mime_type = "image/jpeg" if str(image_path).lower().endswith((".jpg", ".jpeg")) else "image/png"
+            part = types.Part.from_bytes(data=img_bytes, mime_type=mime_type)
+            contents.append(part)
+        except Exception as e:
+            return {"error": f"تعذر قراءة الصورة: {str(e)}"}
 
-        # Normalize fields
-        data.setdefault("question", "")
-        data.setdefault("options", [])
-        data.setdefault("correct_index", 0)
-        data.setdefault("correct_answer", "")
-        data.setdefault("explanation", "")
-        data.setdefault("topic", "ثقافة مالية")
+        for model_name in self.preferred_models:
+            try:
+                response = self.client.models.generate_content(
+                    model=model_name,
+                    contents=contents
+                )
+                if response and response.text:
+                    text = response.text.strip()
+                    match = re.search(r'\{.*\}', text, re.DOTALL)
+                    if match:
+                        data = json.loads(match.group(0))
+                        return data
+                    return {
+                        "question": "سؤال مستخرج من الصورة",
+                        "options": [],
+                        "correct_answer": text,
+                        "explanation": text,
+                        "topic": "ثقافة مالية"
+                    }
+            except Exception:
+                continue
 
-        return data
+        return {"error": "تعذر تحليل السؤال المالي عبر الذكاء الاصطناعي"}
 
-    async def solve_financial_text(
+    async def solve_financial_literacy_text(
         self,
         question: str,
-        options: list[str] | None = None,
-    ) -> dict[str, Any]:
-        """Answer a financial literacy question from text."""
-        if not self.is_available:
-            raise GeminiCircuitOpenError("Gemini unavailable")
+        options: Optional[List[str]] = None
+    ) -> Dict[str, Any]:
+        """حل سؤال ثقافة مالية نصي بالذكاء الاصطناعي مع الشرح والتحليل"""
+        if not self.is_configured():
+            raise ValueError("مفتاح Gemini API غير معين! يرجى إدخال المفتاح أولاً.")
 
-        opts_block = (
-            "\n".join(f"- {o}" for o in options)
-            if options
-            else "(no options provided)"
-        )
-        prompt = (
-            "You are a financial literacy teacher. Answer the question accurately.\n\n"
-            f"Question:\n{question.strip()}\n\n"
-            f"Options:\n{opts_block}\n\n"
-            "Respond with JSON only:\n"
-            '{"correct_answer": "...", "explanation": "...", "topic": "..."}'
-        )
+        options_str = "\n".join([f"- {opt}" for opt in options]) if options else "لا توجد خيارات محددة"
+        prompt = f"""
+أنت معلم وخبير في مادة "الثقافة المالية" للصف الثاني الثانوي.
+أجب عن السؤال التالي بدقة متناهية:
 
-        raw = await self._generate([prompt])
-        data = self._extract_json(raw)
-        if not data or "correct_answer" not in data:
-            raise GeminiResponseError(
-                f"Could not extract answer: {(raw or '')[:120]!r}"
-            )
-        data.setdefault("explanation", "")
-        data.setdefault("topic", "ثقافة مالية")
-        return data
+السؤال:
+{question}
 
-    # ------------------------------------------------------------------
-    # Diagnostics
-    # ------------------------------------------------------------------
+الخيارات إن وجدت:
+{options_str}
 
-    def health(self) -> dict[str, Any]:
-        """Return a dict for the /health endpoint and admin dashboard."""
-        return {
-            "configured": self.is_configured,
-            "breaker_open": self._breaker.is_open,
-            "breaker_failures": self._breaker.failures,
-            "calls": self.usage.calls,
-            "failures": self.usage.failures,
-            "avg_latency_ms": self.usage.avg_latency_ms,
-            "by_model": dict(self.usage.by_model),
-        }
+أرجع الإجابة الصحيحة وشرحاً وافياً ومختصراً باللغة العربية بصيغة JSON:
+{{
+    "correct_answer": "الإجابة الصحيحة النموذجية",
+    "explanation": "تفسير مالي علمي مبسط",
+    "topic": "الموضوع المالي"
+}}
+"""
+        for model_name in self.preferred_models:
+            try:
+                response = self.client.models.generate_content(
+                    model=model_name,
+                    contents=[prompt]
+                )
+                if response and response.text:
+                    text = response.text.strip()
+                    match = re.search(r'\{.*\}', text, re.DOTALL)
+                    if match:
+                        return json.loads(match.group(0))
+                    return {
+                        "correct_answer": text,
+                        "explanation": "تم الحل بواسطة الذكاء الاصطناعي",
+                        "topic": "ثقافة مالية"
+                    }
+            except Exception:
+                continue
+
+        return {"correct_answer": "تعذر استخراج الإجابة", "explanation": "", "topic": "ثقافة مالية"}

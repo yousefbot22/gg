@@ -8,10 +8,10 @@ from pathlib import Path
 from typing import Optional, Dict, Any, Tuple, List
 from playwright.async_api import async_playwright, Browser, BrowserContext, Page
 
-from src.config import Config
-from src.solver.gemini_solver import GeminiSolver
-from src.solver.spx_api import SPXAPI
-from src.solver.answers_db import answers_db
+from config import Config
+from solver.gemini_solver import GeminiSolver
+from solver.spx_api import SPXAPI
+from solver.answers_db import answers_db
 
 logger = logging.getLogger(__name__)
 
