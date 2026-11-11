@@ -1349,343 +1349,86 @@ Sleep for 1.184281 seconds and try again... (tryings = 1, bot id = 7968559602)
 Connection established (tryings = 2, bot id = 7968559602)
 Start polling
 Run polling for bot @ALBOOOtt_BOT id=7968559602 - 'gg'
-Update id=761746099 is handled. Duration 562 ms by bot id=7968559602
-Received SIGINT signal
-Polling stopped for bot @ALBOOOtt_BOT id=7968559602 - 'gg'
-Polling stopped
-Start polling
-Run polling for bot @ALBOOOtt_BOT id=7968559602 - 'gg'
-Update id=761746100 is handled. Duration 549 ms by bot id=7968559602
-Update id=761746101 is handled. Duration 257 ms by bot id=7968559602
-Received SIGINT signal
-Polling stopped for bot @ALBOOOtt_BOT id=7968559602 - 'gg'
-Polling stopped
-Start polling
-Run polling for bot @ALBOOOtt_BOT id=7968559602 - 'gg'
-Update id=761746102 is handled. Duration 582 ms by bot id=7968559602
-Update id=761746103 is handled. Duration 254 ms by bot id=7968559602
-Update id=761746104 is handled. Duration 128 ms by bot id=7968559602
-Update id=761746105 is handled. Duration 275 ms by bot id=7968559602
-Update id=761746106 is handled. Duration 157 ms by bot id=7968559602
-Update id=761746107 is handled. Duration 302 ms by bot id=7968559602
-Received SIGINT signal
-Polling stopped for bot @ALBOOOtt_BOT id=7968559602 - 'gg'
-Polling stopped
-Start polling
-Run polling for bot @ALBOOOtt_BOT id=7968559602 - 'gg'
-Update id=761746108 is handled. Duration 638 ms by bot id=7968559602
-Update id=761746109 is handled. Duration 294 ms by bot id=7968559602
-Update id=761746110 is handled. Duration 136 ms by bot id=7968559602
-Failed to fetch updates - TelegramNetworkError: HTTP Client says - Request timeout error
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
 Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 7968559602)
-Received SIGINT signal
-Polling stopped for bot @ALBOOOtt_BOT id=7968559602 - 'gg'
-Polling stopped
-Update id=761746111 is handled. Duration 141125 ms by bot id=7968559602
-Start polling
-Run polling for bot @ALBOOOtt_BOT id=7968559602 - 'gg'
-Update id=761746112 is handled. Duration 609 ms by bot id=7968559602
-Update id=761746113 is handled. Duration 303 ms by bot id=7968559602
-Update id=761746114 is handled. Duration 227 ms by bot id=7968559602
-Failed to fetch updates - TelegramNetworkError: HTTP Client says - Request timeout error
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 1.297900 seconds and try again... (tryings = 1, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 1.719430 seconds and try again... (tryings = 2, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 2.282643 seconds and try again... (tryings = 3, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 3.104763 seconds and try again... (tryings = 4, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 3.940559 seconds and try again... (tryings = 5, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 4.900674 seconds and try again... (tryings = 6, bot id = 7968559602)
+Connection established (tryings = 7, bot id = 7968559602)
+Update id=761746153 is handled. Duration 1114 ms by bot id=7968559602
+Update id=761746154 is handled. Duration 116 ms by bot id=7968559602
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
 Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 7968559602)
-Update id=761746115 is handled. Duration 121174 ms by bot id=7968559602
-Connection established (tryings = 1, bot id = 7968559602)
-Received SIGINT signal
-Polling stopped for bot @ALBOOOtt_BOT id=7968559602 - 'gg'
-Polling stopped
-Start polling
-Run polling for bot @ALBOOOtt_BOT id=7968559602 - 'gg'
-Update id=761746116 is handled. Duration 580 ms by bot id=7968559602
-Update id=761746117 is handled. Duration 298 ms by bot id=7968559602
-Update id=761746118 is handled. Duration 160 ms by bot id=7968559602
-Update id=761746119 is handled. Duration 216 ms by bot id=7968559602
-Update id=761746120 is handled. Duration 424 ms by bot id=7968559602
-Update id=761746121 is not handled. Duration 3 ms by bot id=7968559602
-Update id=761746122 is not handled. Duration 3 ms by bot id=7968559602
-Update id=761746123 is handled. Duration 225 ms by bot id=7968559602
-Update id=761746124 is handled. Duration 231 ms by bot id=7968559602
-Update id=761746125 is handled. Duration 133 ms by bot id=7968559602
-Update id=761746126 is handled. Duration 250 ms by bot id=7968559602
-Update id=761746127 is handled. Duration 125 ms by bot id=7968559602
-Failed to fetch updates - TelegramNetworkError: HTTP Client says - Request timeout error
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 1.348772 seconds and try again... (tryings = 1, bot id = 7968559602)
+Connection established (tryings = 2, bot id = 7968559602)
+Update id=761746157 is not handled. Duration 2 ms by bot id=7968559602
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
 Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 7968559602)
-Update id=761746128 is handled. Duration 121120 ms by bot id=7968559602
-Connection established (tryings = 1, bot id = 7968559602)
-Received SIGINT signal
-Polling stopped for bot @ALBOOOtt_BOT id=7968559602 - 'gg'
-Polling stopped
-Start polling
-Run polling for bot @ALBOOOtt_BOT id=7968559602 - 'gg'
-Update id=761746129 is handled. Duration 640 ms by bot id=7968559602
-Update id=761746130 is handled. Duration 287 ms by bot id=7968559602
-Update id=761746131 is handled. Duration 148 ms by bot id=7968559602
-Failed to fetch updates - TelegramNetworkError: HTTP Client says - Request timeout error
-Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 7968559602)
-Update id=761746132 is handled. Duration 121098 ms by bot id=7968559602
-Connection established (tryings = 1, bot id = 7968559602)
-Received SIGINT signal
-Polling stopped for bot @ALBOOOtt_BOT id=7968559602 - 'gg'
-Polling stopped
-Start polling
-Run polling for bot @ALBOOOtt_BOT id=7968559602 - 'gg'
-Update id=761746133 is handled. Duration 559 ms by bot id=7968559602
-Update id=761746134 is handled. Duration 285 ms by bot id=7968559602
-Update id=761746135 is handled. Duration 123 ms by bot id=7968559602
-Received SIGINT signal
-Polling stopped for bot @ALBOOOtt_BOT id=7968559602 - 'gg'
-Polling stopped
-Update id=761746136 is handled. Duration 46699 ms by bot id=7968559602
-Start polling
-Run polling for bot @ALBOOOtt_BOT id=7968559602 - 'gg'
-Update id=761746139 is not handled. Duration 4 ms by bot id=7968559602
-Update id=761746138 is handled. Duration 333 ms by bot id=7968559602
-Update id=761746140 is handled. Duration 577 ms by bot id=7968559602
-Update id=761746137 is handled. Duration 608 ms by bot id=7968559602
-Update id=761746141 is handled. Duration 175 ms by bot id=7968559602
-Update id=761746142 is handled. Duration 229 ms by bot id=7968559602
-Update id=761746143 is handled. Duration 139 ms by bot id=7968559602
-Failed to fetch updates - TelegramNetworkError: HTTP Client says - Request timeout error
-Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 7968559602)
-Update id=761746144 is handled. Duration 121218 ms by bot id=7968559602
-Connection established (tryings = 1, bot id = 7968559602)
-Start polling
-Run polling for bot @ALBOOOtt_BOT id=7968559602 - 'gg'
-Update id=761746167 is handled. Duration 642 ms by bot id=7968559602
-Update id=761746168 is handled. Duration 120 ms by bot id=7968559602
-Update id=761746169 is handled. Duration 227 ms by bot id=7968559602
-Update id=761746170 is handled. Duration 147 ms by bot id=7968559602
-Update id=761746171 is handled. Duration 250 ms by bot id=7968559602
-Update id=761746172 is handled. Duration 141 ms by bot id=7968559602
-Update id=761746173 is handled. Duration 15653 ms by bot id=7968559602
-Update id=761746174 is handled. Duration 413 ms by bot id=7968559602
-Update id=761746175 is not handled. Duration 18 ms by bot id=7968559602
-Update id=761746176 is not handled. Duration 18 ms by bot id=7968559602
-Update id=761746177 is handled. Duration 250 ms by bot id=7968559602
-Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientOSError: [WinError 121] The semaphore timeout period has expired
-Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 7968559602)
-Connection established (tryings = 1, bot id = 7968559602)
-Polling stopped
-Polling stopped for bot @ALBOOOtt_BOT id=7968559602 - 'gg'
-Start polling
-Run polling for bot @ALBOOOtt_BOT id=7968559602 - 'gg'
-Update id=761746178 is handled. Duration 391 ms by bot id=7968559602
-Update id=761746179 is handled. Duration 172 ms by bot id=7968559602
-Update id=761746180 is handled. Duration 414 ms by bot id=7968559602
-Update id=761746181 is handled. Duration 142 ms by bot id=7968559602
-Update id=761746182 is handled. Duration 15815 ms by bot id=7968559602
-Update id=761746183 is handled. Duration 611 ms by bot id=7968559602
-Polling stopped
-Polling stopped for bot @ALBOOOtt_BOT id=7968559602 - 'gg'
-Start polling
-Run polling for bot @ALBOOOtt_BOT id=7968559602 - 'gg'
-Update id=761746184 is handled. Duration 459 ms by bot id=7968559602
-Update id=761746185 is handled. Duration 163 ms by bot id=7968559602
-Update id=761746186 is handled. Duration 376 ms by bot id=7968559602
-Update id=761746187 is handled. Duration 143 ms by bot id=7968559602
-Update id=761746188 is handled. Duration 12392 ms by bot id=7968559602
-Update id=761746189 is handled. Duration 518 ms by bot id=7968559602
-Polling stopped
-Polling stopped for bot @ALBOOOtt_BOT id=7968559602 - 'gg'
-Start polling
-Run polling for bot @ALBOOOtt_BOT id=7968559602 - 'gg'
-Update id=761746190 is handled. Duration 308 ms by bot id=7968559602
-Update id=761746191 is handled. Duration 267 ms by bot id=7968559602
-Update id=761746192 is handled. Duration 325 ms by bot id=7968559602
-Update id=761746193 is handled. Duration 12513 ms by bot id=7968559602
-Update id=761746194 is handled. Duration 552 ms by bot id=7968559602
-Update id=761746195 is handled. Duration 138 ms by bot id=7968559602
-SPX Chromium browser initialized successfully.
-Navigating to SPX login: https://egy.app.spx-learning-square.com/login
-SPX Network API Request: GET https://egy.app.spx-learning-square.com/api/v1/auth/me
-Waiting for SPX navigation after login submission...
-SPX Network API Request: POST https://egy.app.spx-learning-square.com/api/v1/auth/login
-SPX Network API Request: GET https://egy.app.spx-learning-square.com/api/v1/auth/me
-SPX Network API Request: GET https://egy.app.spx-learning-square.com/api/v1/platform/languages
-SPX Network API Request: GET https://egy.app.spx-learning-square.com/api/v1/config
-SPX Network API Request: GET https://egy.app.spx-learning-square.com/api/v1/subjects
-SPX Network API Request: POST https://egy.app.spx-learning-square.com/api/v1/media/variants-cookie
-On dashboard: selecting 'الثقافة المالية' only...
-SPX Network API Request: GET https://egy.app.spx-learning-square.com/api/v1/subjects/7
-SPX Network API Request: POST https://egy.app.spx-learning-square.com/api/v1/subjects/7/media-cookie
-SPX Network API Request: GET https://egy.app.spx-learning-square.com/api/v1/subjects/7/units
-SPX Network API Request: GET https://egy.app.spx-learning-square.com/api/v1/subjects/7/skills
-SPX Network API Request: GET https://egy.app.spx-learning-square.com/api/v1/subjects/7/achievements
-SPX Network API Request: GET https://egy.app.spx-learning-square.com/api/v1/subjects/7/games
-SPX Network API Request: GET https://egy.app.spx-learning-square.com/api/v1/auth/me
-SPX API GET https://egy.app.spx-learning-square.com/api/v1/auth/me -> status=200, ok=True, data={'success': True, 'data': {'id': 11984, 'login_id': '470820683', 'email': None, 'email_verified_at': None, 'name': '470820683', 'name_ascii': None, 'role': 'user', 'org_unit_id': 10438, 'ui_languages': 'ar', 'can_change_password': False, 'status': 'active', 'debug_mode': False, 'content_edit_enabled
-SPX Login successful for student: 470820683
-Update id=761746196 is handled. Duration 14818 ms by bot id=7968559602
-SPX Network API Request: GET https://egy.app.spx-learning-square.com/api/v1/auth/me
-SPX API GET https://egy.app.spx-learning-square.com/api/v1/auth/me -> status=200, ok=True, data={'success': True, 'data': {'id': 11984, 'login_id': '470820683', 'email': None, 'email_verified_at': None, 'name': '470820683', 'name_ascii': None, 'role': 'user', 'org_unit_id': 10438, 'ui_languages': 'ar', 'can_change_password': False, 'status': 'active', 'debug_mode': False, 'content_edit_enabled
-SPX Network API Request: GET https://egy.app.spx-learning-square.com/api/v1/subjects/7
-SPX API GET https://egy.app.spx-learning-square.com/api/v1/subjects/7 -> status=200, ok=True, data={'success': True, 'data': {'id': 7, 'name': 'الثقافة المالية', 'subject_type': 'financial_literacy', 'kind': 'normal', 'description': 'تعرّف على المال والادخار والاستثمار والاقتصاد العالمي!', 'language': 'ar', 'code_language': None, 'code_timeout': 10, 'status': 'active', 'chapter_mcq_mode': 'fixed_
-SPX Network API Request: GET https://egy.app.spx-learning-square.com/api/v1/subjects/7/curriculum
-SPX API GET https://egy.app.spx-learning-square.com/api/v1/subjects/7/curriculum -> status=200, ok=True, data={'success': True, 'data': [{'id': 19, 'subject_id': 7, 'unit_order': 1, 'title': 'أساسيات المال والتمويل', 'is_hidden': False, 'is_hidden_debug': False, 'is_default_open': False, 'created_at': '2026-09-08T01:24:44Z', 'updated_at': '2026-09-08T01:24:44Z', 'total_items': 28, 'completed_items': 28, 'pr
-Update id=761746197 is handled. Duration 1031 ms by bot id=7968559602
-Update id=761746198 is handled. Duration 489 ms by bot id=7968559602
-SPX Network API Request: GET https://egy.app.spx-learning-square.com/api/v1/auth/me
-SPX API GET https://egy.app.spx-learning-square.com/api/v1/auth/me -> status=200, ok=True, data={'success': True, 'data': {'id': 11984, 'login_id': '470820683', 'email': None, 'email_verified_at': None, 'name': '470820683', 'name_ascii': None, 'role': 'user', 'org_unit_id': 10438, 'ui_languages': 'ar', 'can_change_password': False, 'status': 'active', 'debug_mode': False, 'content_edit_enabled
-SPX Network API Request: GET https://egy.app.spx-learning-square.com/api/v1/subjects/7
-SPX API GET https://egy.app.spx-learning-square.com/api/v1/subjects/7 -> status=200, ok=True, data={'success': True, 'data': {'id': 7, 'name': 'الثقافة المالية', 'subject_type': 'financial_literacy', 'kind': 'normal', 'description': 'تعرّف على المال والادخار والاستثمار والاقتصاد العالمي!', 'language': 'ar', 'code_language': None, 'code_timeout': 10, 'status': 'active', 'chapter_mcq_mode': 'fixed_
-SPX Network API Request: GET https://egy.app.spx-learning-square.com/api/v1/subjects/7/curriculum
-SPX API GET https://egy.app.spx-learning-square.com/api/v1/subjects/7/curriculum -> status=200, ok=True, data={'success': True, 'data': [{'id': 19, 'subject_id': 7, 'unit_order': 1, 'title': 'أساسيات المال والتمويل', 'is_hidden': False, 'is_hidden_debug': False, 'is_default_open': False, 'created_at': '2026-09-08T01:24:44Z', 'updated_at': '2026-09-08T01:24:44Z', 'total_items': 28, 'completed_items': 28, 'pr
-Update id=761746199 is not handled. Duration 8 ms by bot id=7968559602
-SPX Network API Request: GET https://egy.app.spx-learning-square.com/api/v1/auth/me
-SPX API GET https://egy.app.spx-learning-square.com/api/v1/auth/me -> status=200, ok=True, data={'success': True, 'data': {'id': 11984, 'login_id': '470820683', 'email': None, 'email_verified_at': None, 'name': '470820683', 'name_ascii': None, 'role': 'user', 'org_unit_id': 10438, 'ui_languages': 'ar', 'can_change_password': False, 'status': 'active', 'debug_mode': False, 'content_edit_enabled
-SPX Network API Request: GET https://egy.app.spx-learning-square.com/api/v1/subjects/7
-SPX API GET https://egy.app.spx-learning-square.com/api/v1/subjects/7 -> status=200, ok=True, data={'success': True, 'data': {'id': 7, 'name': 'الثقافة المالية', 'subject_type': 'financial_literacy', 'kind': 'normal', 'description': 'تعرّف على المال والادخار والاستثمار والاقتصاد العالمي!', 'language': 'ar', 'code_language': None, 'code_timeout': 10, 'status': 'active', 'chapter_mcq_mode': 'fixed_
-SPX Network API Request: GET https://egy.app.spx-learning-square.com/api/v1/subjects/7/curriculum
-SPX API GET https://egy.app.spx-learning-square.com/api/v1/subjects/7/curriculum -> status=200, ok=True, data={'success': True, 'data': [{'id': 19, 'subject_id': 7, 'unit_order': 1, 'title': 'أساسيات المال والتمويل', 'is_hidden': False, 'is_hidden_debug': False, 'is_default_open': False, 'created_at': '2026-09-08T01:24:44Z', 'updated_at': '2026-09-08T01:24:44Z', 'total_items': 28, 'completed_items': 28, 'pr
-Update id=761746200 is handled. Duration 1319 ms by bot id=7968559602
-Update id=761746201 is handled. Duration 149 ms by bot id=7968559602
-Update id=761746202 is handled. Duration 212 ms by bot id=7968559602
-Update id=761746203 is handled. Duration 413 ms by bot id=7968559602
-Update id=761746204 is handled. Duration 231 ms by bot id=7968559602
-Update id=761746205 is handled. Duration 198 ms by bot id=7968559602
-Update id=761746206 is handled. Duration 117 ms by bot id=7968559602
-Update id=761746207 is handled. Duration 180 ms by bot id=7968559602
-Update id=761746208 is handled. Duration 180 ms by bot id=7968559602
-Update id=761746209 is handled. Duration 366 ms by bot id=7968559602
-Update id=761746210 is handled. Duration 333 ms by bot id=7968559602
-Update id=761746211 is handled. Duration 212 ms by bot id=7968559602
-Update id=761746212 is handled. Duration 197 ms by bot id=7968559602
-Update id=761746213 is handled. Duration 112 ms by bot id=7968559602
-Update id=761746214 is handled. Duration 174 ms by bot id=7968559602
-Update id=761746215 is handled. Duration 200 ms by bot id=7968559602
-Update id=761746216 is handled. Duration 219 ms by bot id=7968559602
-Update id=761746217 is handled. Duration 207 ms by bot id=7968559602
-Update id=761746218 is handled. Duration 247 ms by bot id=7968559602
-Update id=761746219 is handled. Duration 262 ms by bot id=7968559602
-Update id=761746220 is handled. Duration 403 ms by bot id=7968559602
-Update id=761746221 is handled. Duration 191 ms by bot id=7968559602
-Update id=761746222 is handled. Duration 371 ms by bot id=7968559602
-Update id=761746223 is handled. Duration 217 ms by bot id=7968559602
-Update id=761746224 is handled. Duration 484 ms by bot id=7968559602
-Update id=761746225 is handled. Duration 383 ms by bot id=7968559602
-Update id=761746226 is handled. Duration 249 ms by bot id=7968559602
-Update id=761746227 is handled. Duration 342 ms by bot id=7968559602
-Update id=761746228 is handled. Duration 306 ms by bot id=7968559602
-Failed to fetch updates - TelegramNetworkError: HTTP Client says - Request timeout error
-Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 7968559602)
-Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [The network location cannot be reached. For information about network troubleshooting, see Windows Help]
-Sleep for 1.286262 seconds and try again... (tryings = 1, bot id = 7968559602)
-Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [The network location cannot be reached. For information about network troubleshooting, see Windows Help]
-Sleep for 1.670961 seconds and try again... (tryings = 2, bot id = 7968559602)
-Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [The semaphore timeout period has expired]
-Sleep for 2.149034 seconds and try again... (tryings = 3, bot id = 7968559602)
-Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [The network connection was aborted by the local system]
-Sleep for 2.764932 seconds and try again... (tryings = 4, bot id = 7968559602)
-Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [The network location cannot be reached. For information about network troubleshooting, see Windows Help]
-Sleep for 3.603403 seconds and try again... (tryings = 5, bot id = 7968559602)
-Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [The semaphore timeout period has expired]
-Sleep for 4.754884 seconds and try again... (tryings = 6, bot id = 7968559602)
-Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [The semaphore timeout period has expired]
-Sleep for 5.102392 seconds and try again... (tryings = 7, bot id = 7968559602)
-Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [The semaphore timeout period has expired]
-Sleep for 4.926959 seconds and try again... (tryings = 8, bot id = 7968559602)
-Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [The network location cannot be reached. For information about network troubleshooting, see Windows Help]
-Sleep for 5.127073 seconds and try again... (tryings = 9, bot id = 7968559602)
-Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [The network location cannot be reached. For information about network troubleshooting, see Windows Help]
-Sleep for 5.035560 seconds and try again... (tryings = 10, bot id = 7968559602)
-Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [The network location cannot be reached. For information about network troubleshooting, see Windows Help]
-Sleep for 5.068636 seconds and try again... (tryings = 11, bot id = 7968559602)
-Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [The network location cannot be reached. For information about network troubleshooting, see Windows Help]
-Sleep for 4.916483 seconds and try again... (tryings = 12, bot id = 7968559602)
-Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [The network location cannot be reached. For information about network troubleshooting, see Windows Help]
-Sleep for 5.017664 seconds and try again... (tryings = 13, bot id = 7968559602)
-Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [The network location cannot be reached. For information about network troubleshooting, see Windows Help]
-Sleep for 5.263259 seconds and try again... (tryings = 14, bot id = 7968559602)
-Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [The network location cannot be reached. For information about network troubleshooting, see Windows Help]
-Sleep for 4.827316 seconds and try again... (tryings = 15, bot id = 7968559602)
-Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [The network location cannot be reached. For information about network troubleshooting, see Windows Help]
-Sleep for 5.042893 seconds and try again... (tryings = 16, bot id = 7968559602)
-Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [The network location cannot be reached. For information about network troubleshooting, see Windows Help]
-Sleep for 4.989745 seconds and try again... (tryings = 17, bot id = 7968559602)
-Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [The network location cannot be reached. For information about network troubleshooting, see Windows Help]
-Sleep for 5.052981 seconds and try again... (tryings = 18, bot id = 7968559602)
-Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [The network location cannot be reached. For information about network troubleshooting, see Windows Help]
-Sleep for 5.236858 seconds and try again... (tryings = 19, bot id = 7968559602)
-Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [The network location cannot be reached. For information about network troubleshooting, see Windows Help]
-Sleep for 4.948194 seconds and try again... (tryings = 20, bot id = 7968559602)
-Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [The network location cannot be reached. For information about network troubleshooting, see Windows Help]
-Sleep for 5.027994 seconds and try again... (tryings = 21, bot id = 7968559602)
-Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [The network location cannot be reached. For information about network troubleshooting, see Windows Help]
-Sleep for 4.895561 seconds and try again... (tryings = 22, bot id = 7968559602)
-Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [The network location cannot be reached. For information about network troubleshooting, see Windows Help]
-Sleep for 4.916607 seconds and try again... (tryings = 23, bot id = 7968559602)
-Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [The network location cannot be reached. For information about network troubleshooting, see Windows Help]
-Sleep for 4.981987 seconds and try again... (tryings = 24, bot id = 7968559602)
-Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [The semaphore timeout period has expired]
-Sleep for 4.858595 seconds and try again... (tryings = 25, bot id = 7968559602)
-Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [The network connection was aborted by the local system]
-Sleep for 4.978042 seconds and try again... (tryings = 26, bot id = 7968559602)
-Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [The network location cannot be reached. For information about network troubleshooting, see Windows Help]
-Sleep for 4.908229 seconds and try again... (tryings = 27, bot id = 7968559602)
-Polling stopped
-Polling stopped for bot @ALBOOOtt_BOT id=7968559602 - 'gg'
-Start polling
-Run polling for bot @ALBOOOtt_BOT id=7968559602 - 'gg'
-Update id=761746230 is handled. Duration 427 ms by bot id=7968559602
-Update id=761746229 is handled. Duration 446 ms by bot id=7968559602
-Update id=761746231 is handled. Duration 428 ms by bot id=7968559602
-Update id=761746232 is handled. Duration 439 ms by bot id=7968559602
-Update id=761746233 is handled. Duration 432 ms by bot id=7968559602
-Update id=761746234 is handled. Duration 284 ms by bot id=7968559602
-Failed to fetch updates - TelegramNetworkError: HTTP Client says - Request timeout error
-Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 7968559602)
-Connection established (tryings = 1, bot id = 7968559602)
-Update id=761746235 is handled. Duration 375 ms by bot id=7968559602
-Update id=761746236 is handled. Duration 211 ms by bot id=7968559602
-Failed to fetch updates - TelegramNetworkError: HTTP Client says - Request timeout error
-Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 7968559602)
-Connection established (tryings = 1, bot id = 7968559602)
-Update id=761746237 is handled. Duration 456 ms by bot id=7968559602
-Update id=761746238 is handled. Duration 224 ms by bot id=7968559602
-Update id=761746239 is handled. Duration 305 ms by bot id=7968559602
-Update id=761746240 is handled. Duration 229 ms by bot id=7968559602
-Update id=761746241 is handled. Duration 3275 ms by bot id=7968559602
-Update id=761746242 is handled. Duration 172 ms by bot id=7968559602
-Update id=761746243 is handled. Duration 349 ms by bot id=7968559602
-Failed to fetch updates - TelegramNetworkError: HTTP Client says - Request timeout error
-Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 7968559602)
-Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorDNSError: Cannot connect to host api.telegram.org:443 ssl:default [getaddrinfo failed]
-Sleep for 1.322166 seconds and try again... (tryings = 1, bot id = 7968559602)
-Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorDNSError: Cannot connect to host api.telegram.org:443 ssl:default [getaddrinfo failed]
-Sleep for 1.541663 seconds and try again... (tryings = 2, bot id = 7968559602)
-Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorDNSError: Cannot connect to host api.telegram.org:443 ssl:default [getaddrinfo failed]
-Sleep for 1.993176 seconds and try again... (tryings = 3, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 1.438525 seconds and try again... (tryings = 1, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 2.010212 seconds and try again... (tryings = 2, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 2.567589 seconds and try again... (tryings = 3, bot id = 7968559602)
 Connection established (tryings = 4, bot id = 7968559602)
-Update id=761746244 is handled. Duration 861 ms by bot id=7968559602
-Update id=761746245 is handled. Duration 1023 ms by bot id=7968559602
-Update id=761746246 is handled. Duration 312 ms by bot id=7968559602
-Update id=761746247 is handled. Duration 422 ms by bot id=7968559602
-Update id=761746248 is handled. Duration 286 ms by bot id=7968559602
-Polling stopped
+Update id=761746158 is not handled. Duration 3 ms by bot id=7968559602
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 7968559602)
+Connection established (tryings = 1, bot id = 7968559602)
+Update id=761746159 is handled. Duration 134 ms by bot id=7968559602
+Update id=761746160 is handled. Duration 241 ms by bot id=7968559602
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 7968559602)
+Connection established (tryings = 1, bot id = 7968559602)
+Update id=761746161 is handled. Duration 136 ms by bot id=7968559602
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 1.397954 seconds and try again... (tryings = 1, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 1.772028 seconds and try again... (tryings = 2, bot id = 7968559602)
+Update id=761746162 is handled. Duration 25279 ms by bot id=7968559602
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 2.220991 seconds and try again... (tryings = 3, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 3.008643 seconds and try again... (tryings = 4, bot id = 7968559602)
+Connection established (tryings = 5, bot id = 7968559602)
+Update id=761746163 is handled. Duration 165 ms by bot id=7968559602
+Update id=761746164 is handled. Duration 250 ms by bot id=7968559602
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 7968559602)
+Connection established (tryings = 1, bot id = 7968559602)
+Update id=761746165 is handled. Duration 122 ms by bot id=7968559602
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 7968559602)
+Update id=761746166 is handled. Duration 12440 ms by bot id=7968559602
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 1.332181 seconds and try again... (tryings = 1, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 1.803594 seconds and try again... (tryings = 2, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 2.431640 seconds and try again... (tryings = 3, bot id = 7968559602)
+Connection established (tryings = 4, bot id = 7968559602)
 Polling stopped for bot @ALBOOOtt_BOT id=7968559602 - 'gg'
+Polling stopped
 Start polling
-Run polling for bot @ALBOOOtt_BOT id=7968559602 - 'Qureo Auto Solver'
-Update id=761746249 is handled. Duration 444 ms by bot id=7968559602
-Update id=761746250 is handled. Duration 202 ms by bot id=7968559602
-Update id=761746251 is handled. Duration 318 ms by bot id=7968559602
-Update id=761746252 is handled. Duration 637 ms by bot id=7968559602
-Update id=761746253 is handled. Duration 305 ms by bot id=7968559602
-Update id=761746254 is handled. Duration 306 ms by bot id=7968559602
-Update id=761746255 is handled. Duration 423 ms by bot id=7968559602
-Update id=761746256 is handled. Duration 300 ms by bot id=7968559602
-Update id=761746257 is handled. Duration 322 ms by bot id=7968559602
-Update id=761746258 is handled. Duration 427 ms by bot id=7968559602
-Update id=761746259 is handled. Duration 407 ms by bot id=7968559602
-Update id=761746260 is handled. Duration 278 ms by bot id=7968559602
-Update id=761746261 is handled. Duration 119 ms by bot id=7968559602
-Update id=761746262 is handled. Duration 363 ms by bot id=7968559602
-Update id=761746263 is handled. Duration 182 ms by bot id=7968559602
-Update id=761746264 is handled. Duration 360 ms by bot id=7968559602
-Update id=761746265 is handled. Duration 182 ms by bot id=7968559602
-Update id=761746266 is handled. Duration 18158 ms by bot id=7968559602
-Update id=761746267 is not handled. Duration 23 ms by bot id=7968559602
-Update id=761746268 is not handled. Duration 23 ms by bot id=7968559602
-Update id=761746269 is handled. Duration 319 ms by bot id=7968559602
+Run polling for bot @ALBOOOtt_BOT id=7968559602 - 'FLASH QUREO'
+Update id=761746459 is handled. Duration 422 ms by bot id=7968559602
+Update id=761746460 is handled. Duration 398 ms by bot id=7968559602
+Update id=761746461 is handled. Duration 258 ms by bot id=7968559602
+Update id=761746462 is handled. Duration 110 ms by bot id=7968559602
+Update id=761746463 is handled. Duration 19106 ms by bot id=7968559602
+Update id=761746464 is handled. Duration 264 ms by bot id=7968559602
 ✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90001) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
 ✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90002) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
 ✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90003) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
@@ -1728,186 +1471,172 @@ Update id=761746269 is handled. Duration 319 ms by bot id=7968559602
 ✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90040) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
 ✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90041) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
 ✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90042) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
-Update id=761746270 is handled. Duration 282 ms by bot id=7968559602
-Update id=761746271 is handled. Duration 294 ms by bot id=7968559602
-Update id=761746272 is handled. Duration 170 ms by bot id=7968559602
-Update id=761746273 is handled. Duration 408 ms by bot id=7968559602
-Update id=761746274 is handled. Duration 305 ms by bot id=7968559602
-Update id=761746275 is handled. Duration 272 ms by bot id=7968559602
-Update id=761746276 is handled. Duration 343 ms by bot id=7968559602
-Update id=761746277 is handled. Duration 153 ms by bot id=7968559602
-Update id=761746278 is handled. Duration 129 ms by bot id=7968559602
-Update id=761746279 is handled. Duration 173 ms by bot id=7968559602
-Update id=761746280 is handled. Duration 172 ms by bot id=7968559602
-Update id=761746281 is handled. Duration 147 ms by bot id=7968559602
-Update id=761746282 is handled. Duration 168 ms by bot id=7968559602
-Polling stopped
-Polling stopped for bot @ALBOOOtt_BOT id=7968559602 - 'Qureo Auto Solver'
-Start polling
-Run polling for bot @ALBOOOtt_BOT id=7968559602 - 'FLASH QUREO'
-Update id=761746283 is handled. Duration 476 ms by bot id=7968559602
-Update id=761746284 is handled. Duration 314 ms by bot id=7968559602
-Update id=761746285 is handled. Duration 160 ms by bot id=7968559602
-Update id=761746286 is handled. Duration 178 ms by bot id=7968559602
-Update id=761746287 is not handled. Duration 12 ms by bot id=7968559602
-Update id=761746288 is not handled. Duration 10 ms by bot id=7968559602
-Update id=761746289 is not handled. Duration 11 ms by bot id=7968559602
-Update id=761746290 is handled. Duration 200 ms by bot id=7968559602
-Update id=761746291 is handled. Duration 167 ms by bot id=7968559602
-Update id=761746292 is handled. Duration 161 ms by bot id=7968559602
-Polling stopped for bot @ALBOOOtt_BOT id=7968559602 - 'FLASH QUREO'
-Polling stopped
-Start polling
-Run polling for bot @ALBOOOtt_BOT id=7968559602 - 'FLASH QUREO'
-Update id=761746293 is handled. Duration 569 ms by bot id=7968559602
-Update id=761746294 is handled. Duration 612 ms by bot id=7968559602
-Update id=761746295 is handled. Duration 165 ms by bot id=7968559602
-Update id=761746296 is handled. Duration 408 ms by bot id=7968559602
-Update id=761746297 is not handled. Duration 11 ms by bot id=7968559602
-Update id=761746298 is handled. Duration 504 ms by bot id=7968559602
-Update id=761746299 is handled. Duration 205 ms by bot id=7968559602
-Update id=761746300 is handled. Duration 568 ms by bot id=7968559602
-Update id=761746301 is handled. Duration 169 ms by bot id=7968559602
-Update id=761746302 is handled. Duration 408 ms by bot id=7968559602
-Update id=761746303 is handled. Duration 269 ms by bot id=7968559602
-Update id=761746304 is handled. Duration 204 ms by bot id=7968559602
-Update id=761746305 is handled. Duration 613 ms by bot id=7968559602
-Update id=761746306 is handled. Duration 407 ms by bot id=7968559602
-Update id=761746307 is handled. Duration 409 ms by bot id=7968559602
-Update id=761746308 is handled. Duration 324 ms by bot id=7968559602
-Update id=761746309 is handled. Duration 409 ms by bot id=7968559602
-Update id=761746310 is handled. Duration 203 ms by bot id=7968559602
-Update id=761746311 is handled. Duration 390 ms by bot id=7968559602
-Polling stopped
-Polling stopped for bot @ALBOOOtt_BOT id=7968559602 - 'FLASH QUREO'
-Start polling
-Run polling for bot @ALBOOOtt_BOT id=7968559602 - 'FLASH QUREO'
-Update id=761746312 is handled. Duration 460 ms by bot id=7968559602
-Update id=761746313 is handled. Duration 416 ms by bot id=7968559602
-Update id=761746314 is handled. Duration 407 ms by bot id=7968559602
-Update id=761746315 is handled. Duration 305 ms by bot id=7968559602
-Update id=761746316 is handled. Duration 241 ms by bot id=7968559602
-Update id=761746317 is handled. Duration 306 ms by bot id=7968559602
-Update id=761746318 is handled. Duration 139 ms by bot id=7968559602
-Update id=761746319 is handled. Duration 384 ms by bot id=7968559602
-Update id=761746320 is handled. Duration 171 ms by bot id=7968559602
-Update id=761746321 is handled. Duration 408 ms by bot id=7968559602
-Update id=761746322 is handled. Duration 761 ms by bot id=7968559602
-Update id=761746323 is handled. Duration 306 ms by bot id=7968559602
-Update id=761746324 is handled. Duration 279 ms by bot id=7968559602
-Update id=761746325 is handled. Duration 305 ms by bot id=7968559602
-Update id=761746326 is handled. Duration 159 ms by bot id=7968559602
-Update id=761746327 is handled. Duration 228 ms by bot id=7968559602
-Update id=761746328 is handled. Duration 527 ms by bot id=7968559602
-Polling stopped
-Polling stopped for bot @ALBOOOtt_BOT id=7968559602 - 'FLASH QUREO'
-Start polling
-Run polling for bot @ALBOOOtt_BOT id=7968559602 - 'FLASH QUREO'
-Update id=761746329 is handled. Duration 496 ms by bot id=7968559602
-Update id=761746330 is handled. Duration 409 ms by bot id=7968559602
-Update id=761746331 is handled. Duration 206 ms by bot id=7968559602
-Update id=761746332 is handled. Duration 239 ms by bot id=7968559602
-Update id=761746333 is handled. Duration 612 ms by bot id=7968559602
-Update id=761746334 is handled. Duration 273 ms by bot id=7968559602
-Update id=761746335 is handled. Duration 376 ms by bot id=7968559602
-Update id=761746336 is handled. Duration 282 ms by bot id=7968559602
-Update id=761746337 is handled. Duration 249 ms by bot id=7968559602
-Update id=761746338 is handled. Duration 253 ms by bot id=7968559602
-Update id=761746339 is handled. Duration 229 ms by bot id=7968559602
-Update id=761746340 is handled. Duration 134 ms by bot id=7968559602
-Update id=761746341 is handled. Duration 323 ms by bot id=7968559602
-Update id=761746342 is handled. Duration 156 ms by bot id=7968559602
-Update id=761746343 is handled. Duration 349 ms by bot id=7968559602
-Update id=761746344 is handled. Duration 632 ms by bot id=7968559602
-Update id=761746345 is handled. Duration 180 ms by bot id=7968559602
-Update id=761746346 is handled. Duration 407 ms by bot id=7968559602
-Update id=761746347 is handled. Duration 271 ms by bot id=7968559602
-Update id=761746348 is handled. Duration 231 ms by bot id=7968559602
-Update id=761746349 is handled. Duration 466 ms by bot id=7968559602
-Polling stopped
-Polling stopped for bot @ALBOOOtt_BOT id=7968559602 - 'FLASH QUREO'
-Start polling
-Run polling for bot @ALBOOOtt_BOT id=7968559602 - 'FLASH QUREO'
-Update id=761746350 is handled. Duration 608 ms by bot id=7968559602
-Update id=761746351 is handled. Duration 428 ms by bot id=7968559602
-Update id=761746352 is handled. Duration 306 ms by bot id=7968559602
-Update id=761746353 is handled. Duration 293 ms by bot id=7968559602
-Update id=761746354 is handled. Duration 258 ms by bot id=7968559602
-Update id=761746355 is handled. Duration 306 ms by bot id=7968559602
-Update id=761746356 is handled. Duration 356 ms by bot id=7968559602
-Update id=761746357 is handled. Duration 305 ms by bot id=7968559602
-Update id=761746358 is handled. Duration 131 ms by bot id=7968559602
-Update id=761746359 is handled. Duration 304 ms by bot id=7968559602
-Update id=761746360 is handled. Duration 160 ms by bot id=7968559602
-Update id=761746361 is handled. Duration 324 ms by bot id=7968559602
-Update id=761746362 is handled. Duration 583 ms by bot id=7968559602
-Polling stopped for bot @ALBOOOtt_BOT id=7968559602 - 'FLASH QUREO'
-Polling stopped
-Start polling
-Run polling for bot @ALBOOOtt_BOT id=7968559602 - 'FLASH QUREO'
-Update id=761746363 is handled. Duration 462 ms by bot id=7968559602
-Update id=761746364 is handled. Duration 323 ms by bot id=7968559602
-Update id=761746365 is handled. Duration 424 ms by bot id=7968559602
-Update id=761746366 is handled. Duration 305 ms by bot id=7968559602
-Update id=761746367 is handled. Duration 254 ms by bot id=7968559602
-Update id=761746368 is handled. Duration 306 ms by bot id=7968559602
-Update id=761746369 is handled. Duration 511 ms by bot id=7968559602
-Update id=761746370 is handled. Duration 600 ms by bot id=7968559602
-Update id=761746371 is handled. Duration 215 ms by bot id=7968559602
-Update id=761746372 is handled. Duration 306 ms by bot id=7968559602
-Update id=761746373 is handled. Duration 420 ms by bot id=7968559602
-Update id=761746374 is handled. Duration 305 ms by bot id=7968559602
-Update id=761746375 is handled. Duration 287 ms by bot id=7968559602
-Update id=761746376 is handled. Duration 166 ms by bot id=7968559602
-Update id=761746377 is handled. Duration 343 ms by bot id=7968559602
-Update id=761746378 is handled. Duration 405 ms by bot id=7968559602
-Update id=761746379 is handled. Duration 213 ms by bot id=7968559602
-Update id=761746380 is handled. Duration 16564 ms by bot id=7968559602
-Update id=761746381 is handled. Duration 471 ms by bot id=7968559602
+Failed to fetch updates - TelegramNetworkError: HTTP Client says - Request timeout error
+Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 7968559602)
+Connection established (tryings = 1, bot id = 7968559602)
+Update id=761746467 is handled. Duration 504 ms by bot id=7968559602
+Update id=761746466 is handled. Duration 556 ms by bot id=7968559602
+Update id=761746465 is handled. Duration 763 ms by bot id=7968559602
+Update id=761746468 is handled. Duration 121 ms by bot id=7968559602
+Update id=761746469 is handled. Duration 402 ms by bot id=7968559602
+Update id=761746470 is handled. Duration 118 ms by bot id=7968559602
+Update id=761746471 is handled. Duration 12437 ms by bot id=7968559602
+Update id=761746472 is handled. Duration 212 ms by bot id=7968559602
 ✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90001) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
 ✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90002) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
 ✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90003) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
+✅ [بنك الإجابات] تم حفظ إجابة السؤال الاختياري (90004010) بنجاح.
+✅ [بنك الإجابات] تم حفظ إجابة السؤال الاختياري (90004040) بنجاح.
+✅ [بنك الإجابات] تم حفظ إجابة السؤال الاختياري (90004050) بنجاح.
+✅ [بنك الإجابات] تم حفظ إجابة السؤال الاختياري (90004070) بنجاح.
+✅ [بنك الإجابات] تم حفظ الإجابة النموذجية البرمجية للسؤال (90004020) بنجاح.
+✅ [بنك الإجابات] تم حفظ الإجابة النموذجية البرمجية للسؤال (90004030) بنجاح.
+✅ [بنك الإجابات] تم حفظ الإجابة النموذجية البرمجية للسؤال (90004060) بنجاح.
+✅ [بنك الإجابات] تم حفظ الإجابة النموذجية البرمجية للسؤال (90004080) بنجاح.
 ✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90004) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
 ✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90005) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
 ✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90006) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
 ✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90007) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
+✅ [بنك الإجابات] تم حفظ إجابة السؤال الاختياري (90008020) بنجاح.
+✅ [بنك الإجابات] تم حفظ إجابة السؤال الاختياري (90008040) بنجاح.
+✅ [بنك الإجابات] تم حفظ إجابة السؤال الاختياري (90008060) بنجاح.
+✅ [بنك الإجابات] تم حفظ الإجابة النموذجية البرمجية للسؤال (90008010) بنجاح.
+✅ [بنك الإجابات] تم حفظ الإجابة النموذجية البرمجية للسؤال (90008030) بنجاح.
+✅ [بنك الإجابات] تم حفظ الإجابة النموذجية البرمجية للسؤال (90008050) بنجاح.
+✅ [بنك الإجابات] تم حفظ الإجابة النموذجية البرمجية للسؤال (90008070) بنجاح.
 ✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90008) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
 ✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90009) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
 ✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90010) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
+✅ [بنك الإجابات] تم حفظ إجابة السؤال الاختياري (90011010) بنجاح.
+✅ [بنك الإجابات] تم حفظ إجابة السؤال الاختياري (90011020) بنجاح.
+✅ [بنك الإجابات] تم حفظ إجابة السؤال الاختياري (90011030) بنجاح.
+✅ [بنك الإجابات] تم حفظ إجابة السؤال الاختياري (90011040) بنجاح.
+✅ [بنك الإجابات] تم حفظ إجابة السؤال الاختياري (90011050) بنجاح.
+✅ [بنك الإجابات] تم حفظ الإجابة النموذجية البرمجية للسؤال (90011060) بنجاح.
+✅ [بنك الإجابات] تم حفظ الإجابة النموذجية البرمجية للسؤال (90011070) بنجاح.
+✅ [بنك الإجابات] تم حفظ الإجابة النموذجية البرمجية للسؤال (90011080) بنجاح.
 ✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90011) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
 ✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90012) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
 ✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90013) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
+✅ [بنك الإجابات] تم حفظ إجابة السؤال الاختياري (90014010) بنجاح.
+✅ [بنك الإجابات] تم حفظ إجابة السؤال الاختياري (90014020) بنجاح.
+✅ [بنك الإجابات] تم حفظ إجابة السؤال الاختياري (90014030) بنجاح.
+✅ [بنك الإجابات] تم حفظ إجابة السؤال الاختياري (90014040) بنجاح.
+✅ [بنك الإجابات] تم حفظ إجابة السؤال الاختياري (90014060) بنجاح.
+✅ [بنك الإجابات] تم حفظ الإجابة النموذجية البرمجية للسؤال (90014050) بنجاح.
+✅ [بنك الإجابات] تم حفظ الإجابة النموذجية البرمجية للسؤال (90014070) بنجاح.
+✅ [بنك الإجابات] تم حفظ الإجابة النموذجية البرمجية للسؤال (90014080) بنجاح.
 ✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90014) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
 ✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90015) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
+Update id=761746473 is handled. Duration 1483 ms by bot id=7968559602
 ✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90016) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
+✅ [بنك الإجابات] تم حفظ إجابة السؤال الاختياري (90017010) بنجاح.
+✅ [بنك الإجابات] تم حفظ إجابة السؤال الاختياري (90017020) بنجاح.
+✅ [بنك الإجابات] تم حفظ إجابة السؤال الاختياري (90017030) بنجاح.
+✅ [بنك الإجابات] تم حفظ إجابة السؤال الاختياري (90017040) بنجاح.
+✅ [بنك الإجابات] تم حفظ إجابة السؤال الاختياري (90017070) بنجاح.
+✅ [بنك الإجابات] تم حفظ إجابة السؤال الاختياري (90017090) بنجاح.
+✅ [بنك الإجابات] تم حفظ الإجابة النموذجية البرمجية للسؤال (90017050) بنجاح.
+✅ [بنك الإجابات] تم حفظ الإجابة النموذجية البرمجية للسؤال (90017060) بنجاح.
+✅ [بنك الإجابات] تم حفظ الإجابة النموذجية البرمجية للسؤال (90017080) بنجاح.
+✅ [بنك الإجابات] تم حفظ الإجابة النموذجية البرمجية للسؤال (90017100) بنجاح.
 ✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90017) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
-✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90018) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
-✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90019) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
-✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90020) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
-✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90021) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
-✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90022) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
-✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90023) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
-✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90024) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
-✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90025) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
-✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90026) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
-✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90027) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
-✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90028) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
-✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90029) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
-✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90030) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
-✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90031) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
-✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90032) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
-✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90033) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
-✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90034) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
-✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90035) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
-✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90036) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
-✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90037) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
-✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90038) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
-✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90039) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
-✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90040) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
-✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90041) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
-✅ [تقدم الفصل] تم تحديث إنجاز الفصل (90042) بنجاح (مكتمل: 1 | الماسات: 5/5 💎)
-Update id=761746382 is not handled. Duration 19 ms by bot id=7968559602
-Update id=761746383 is handled. Duration 328 ms by bot id=7968559602
-Update id=761746384 is handled. Duration 258 ms by bot id=7968559602
-Update id=761746385 is handled. Duration 408 ms by bot id=7968559602
-Update id=761746386 is handled. Duration 154 ms by bot id=7968559602
+Update id=761746474 is handled. Duration 217 ms by bot id=7968559602
+Update id=761746475 is handled. Duration 275 ms by bot id=7968559602
+Update id=761746476 is handled. Duration 337 ms by bot id=7968559602
+Update id=761746478 is handled. Duration 36 ms by bot id=7968559602
+Update id=761746480 is handled. Duration 4003 ms by bot id=7968559602
+Update id=761746479 is handled. Duration 4020 ms by bot id=7968559602
+Update id=761746477 is handled. Duration 4215 ms by bot id=7968559602
+Update id=761746481 is handled. Duration 201 ms by bot id=7968559602
+Update id=761746482 is handled. Duration 198 ms by bot id=7968559602
+Update id=761746483 is handled. Duration 286 ms by bot id=7968559602
+Failed to fetch updates - TelegramNetworkError: HTTP Client says - Request timeout error
+Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 7968559602)
+Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [The network location cannot be reached. For information about network troubleshooting, see Windows Help]
+Sleep for 1.346149 seconds and try again... (tryings = 1, bot id = 7968559602)
+Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [The network location cannot be reached. For information about network troubleshooting, see Windows Help]
+Sleep for 1.825111 seconds and try again... (tryings = 2, bot id = 7968559602)
+Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [The network location cannot be reached. For information about network troubleshooting, see Windows Help]
+Sleep for 2.408760 seconds and try again... (tryings = 3, bot id = 7968559602)
+Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [The network location cannot be reached. For information about network troubleshooting, see Windows Help]
+Sleep for 3.140313 seconds and try again... (tryings = 4, bot id = 7968559602)
+Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [The network location cannot be reached. For information about network troubleshooting, see Windows Help]
+Sleep for 3.921702 seconds and try again... (tryings = 5, bot id = 7968559602)
+Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [The network location cannot be reached. For information about network troubleshooting, see Windows Help]
+Sleep for 5.187960 seconds and try again... (tryings = 6, bot id = 7968559602)
+Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [The network location cannot be reached. For information about network troubleshooting, see Windows Help]
+Sleep for 5.119256 seconds and try again... (tryings = 7, bot id = 7968559602)
+Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [The network location cannot be reached. For information about network troubleshooting, see Windows Help]
+Sleep for 4.866393 seconds and try again... (tryings = 8, bot id = 7968559602)
+Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [The network location cannot be reached. For information about network troubleshooting, see Windows Help]
+Sleep for 5.015337 seconds and try again... (tryings = 9, bot id = 7968559602)
+Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [The network location cannot be reached. For information about network troubleshooting, see Windows Help]
+Sleep for 4.817524 seconds and try again... (tryings = 10, bot id = 7968559602)
+Connection established (tryings = 11, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 1.425765 seconds and try again... (tryings = 1, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 1.838548 seconds and try again... (tryings = 2, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 2.494490 seconds and try again... (tryings = 3, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 3.207756 seconds and try again... (tryings = 4, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 4.148220 seconds and try again... (tryings = 5, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 4.878331 seconds and try again... (tryings = 6, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 5.239156 seconds and try again... (tryings = 7, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 4.648718 seconds and try again... (tryings = 8, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 4.942562 seconds and try again... (tryings = 9, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 4.988260 seconds and try again... (tryings = 10, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 5.204290 seconds and try again... (tryings = 11, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 5.035285 seconds and try again... (tryings = 12, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 5.144551 seconds and try again... (tryings = 13, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 5.134694 seconds and try again... (tryings = 14, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 4.991930 seconds and try again... (tryings = 15, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 5.098953 seconds and try again... (tryings = 16, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 5.090178 seconds and try again... (tryings = 17, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 5.072289 seconds and try again... (tryings = 18, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 4.920200 seconds and try again... (tryings = 19, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 5.259566 seconds and try again... (tryings = 20, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 4.972643 seconds and try again... (tryings = 21, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 5.184396 seconds and try again... (tryings = 22, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 5.048341 seconds and try again... (tryings = 23, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 5.343129 seconds and try again... (tryings = 24, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 4.991546 seconds and try again... (tryings = 25, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 5.035588 seconds and try again... (tryings = 26, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 4.899942 seconds and try again... (tryings = 27, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 5.183282 seconds and try again... (tryings = 28, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 4.990507 seconds and try again... (tryings = 29, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 5.022705 seconds and try again... (tryings = 30, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 4.995696 seconds and try again... (tryings = 31, bot id = 7968559602)
+Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+Sleep for 4.849011 seconds and try again... (tryings = 32, bot id = 7968559602)
