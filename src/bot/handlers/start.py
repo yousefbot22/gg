@@ -43,12 +43,12 @@ async def cmd_start(message: Message, state: FSMContext, session: UserSession) -
         f"👋 أهلاً {name} في *بوت حل منصة كيريو* ⚡\n"
         "━━━━━━━━━━━━━━━━━━━━\n"
     )
-    if not is_sub and trial_count >= 10:
-        text += "🔒 لقد استهلكت التجربة المجانية (10 مستويات).\n"
+    if not is_sub and trial_count >= 4:
+        text += "🔒 لقد استهلكت التجربة المجانية (4 مستويات).\n"
         text += "تواصل معنا لحل المنصة كاملة، أو انضم بباقة اشتراك.\n"
     else:
         if not is_sub:
-            rem = max(0, 10 - trial_count)
+            rem = max(0, 4 - trial_count)
             text += f"🎁 *تجربة مجانية*: متبقي لك {rem} مستويات\n"
         text += "🎓 *اختر صفك الدراسي للبدء*"
 

@@ -11,7 +11,6 @@ from src.bot.keyboards import cancel_keyboard, grade_keyboard, main_menu_keyboar
 from src.bot.states import OnboardingStates, SubscriptionStates
 from src.core.logger import get_logger
 from src.db.repositories import subscriptions_repo, users_repo
-from src.services.owner_notifier import notify_owner_new_member
 from src.services.session_manager import UserSession
 
 log = get_logger(__name__)
@@ -48,7 +47,7 @@ async def process_sub_password(
     group = subscriptions_repo.verify_by_password(entered)
     if not group:
         await message.answer(
-            "❌ *الباسورد غير صحيح أو مستخدم من قبل.*\nحاول مجدداً أو تواصل مع المسؤول:",
+            "❌ *الباسورد غير صحيح.*\nحاول مجدداً أو تواصل مع المسؤول:",
             reply_markup=cancel_keyboard(),
             parse_mode="Markdown",
         )
@@ -71,31 +70,10 @@ async def process_sub_password(
         )
         return
 
-    # Add member (يستهلك الباسورد إذا كانت لمرة واحدة)
-    ok = subscriptions_repo.add_member(group.group_id, session.user_id)
-    if not ok:
-        await message.answer(
-            "❌ *تعذر الانضمام.*\nالباسورد مستخدم من قبل.",
-            reply_markup=cancel_keyboard(),
-            parse_mode="Markdown",
-        )
-        return
-
+    # Add member
+    subscriptions_repo.add_member(group.group_id, session.user_id)
     session.active_group_id = group.group_id
-    session.full_name = message.from_user.full_name
-    session.username = message.from_user.username
     await state.clear()
-
-    # ✅ إشعار الأونر فوراً عند الانضمام
-    await notify_owner_new_member(
-        message.bot,
-        user_id=session.user_id,
-        full_name=message.from_user.full_name,
-        username=message.from_user.username,
-        group_id=group.group_id,
-        tier_name=group.tier_name,
-        is_one_time=group.is_one_time,
-    )
 
     rem = group.max_users - group.completed_count
     await message.answer(

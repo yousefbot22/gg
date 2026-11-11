@@ -61,10 +61,12 @@ async def cmd_stop(message: Message, session: UserSession) -> None:
 async def about(callback: CallbackQuery) -> None:
     await callback.answer()
     await callback.message.edit_text(
-        "ℹ️ *Qureo Auto Solver*\n"
+        "ℹ️ *بوت حل منصة كيريو*\n"
         "━━━━━━━━━━━━━━━━━━━━\n"
-        "👨‍💻 المطور: YOUSEF MOHAMED\n\n"
-        "🔒 حسابات معزولة 100%\n",
+        "👨‍💻 المطور: مينا شحاتة\n\n"
+        "⚡ حل تلقائي عبر الـ API\n"
+        "🔒 حسابات معزولة 100%\n"
+        "🤖 مدعوم بـ Gemini AI",
         reply_markup=main_menu_keyboard(False),
         parse_mode="Markdown",
     )
@@ -87,43 +89,9 @@ async def noop(callback: CallbackQuery) -> None:
 
 async def show_trial_exhausted(message: Message) -> None:
     await message.edit_text(
-        "🔒 *انتهت التجربة المجانية (10 مستويات)*\n"
+        "🔒 *انتهت التجربة المجانية (4 مستويات)*\n"
         "━━━━━━━━━━━━━━━━━━━━\n"
         "لحل المنصة كاملة، انضم بباقة اشتراك أو تواصل معنا.",
         reply_markup=trial_exhausted_keyboard(),
         parse_mode="Markdown",
     )
-
-
-# ==============================================================
-# ✅ Force Subscription — زر "تحققت من الاشتراك"
-# ==============================================================
-
-@router.callback_query(F.data == "forcesub:check")
-async def forcesub_check(callback: CallbackQuery) -> None:
-    """يتحقق من اشتراك المستخدم في القناة بعد ضغط زر الانضمام."""
-    from src.services.force_sub import is_subscribed
-
-    ok = await is_subscribed(callback.bot, callback.from_user.id)
-    if ok:
-        await callback.answer(
-            "✅ تم التحقق! يمكنك الآن استخدام البوت.",
-            show_alert=True,
-        )
-        try:
-            await callback.message.delete()
-        except Exception:
-            pass
-        # إعادة عرض القائمة الرئيسية
-        try:
-            await callback.message.answer(
-                "🏠 *القائمة الرئيسية:*\nاضغط /start للبدء.",
-                parse_mode="Markdown",
-            )
-        except Exception:
-            pass
-    else:
-        await callback.answer(
-            "❌ لم تشترك بعد. اضغط زر «انضم للقناة» أولاً ثم أعد المحاولة.",
-            show_alert=True,
-        )

@@ -1,5 +1,6 @@
 """Login flow."""
 from __future__ import annotations
+
 from aiogram import F, Router
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, Message
@@ -82,7 +83,7 @@ async def got_password(message: Message, state: FSMContext, session: UserSession
     status_msg = await message.answer("🔄 *جاري تسجيل الدخول...*", parse_mode="Markdown")
 
     # Build client
-    client = QureoClient()
+    client = QureoClient(user_id=session.user_id)
     try:
         ok, msg, screenshot = await client.login(session.username, password)
     except Exception as e:

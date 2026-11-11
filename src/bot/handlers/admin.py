@@ -1,16 +1,12 @@
 """
-Admin handlers — dashboard, Firebase, analytics, external solving.
+Admin handlers — dashboard, subscriptions management, external solving.
 
 Security:
 - Every callback in this router validates `session.is_admin` before running.
 - Admin password is checked against `subscriptions_repo` (hashed).
 - Password messages are deleted immediately after reading.
-
-NOTE: Subscription group management has been moved to `admin_groups.py`.
 """
 from __future__ import annotations
-
-import hashlib
 
 from aiogram import F, Router
 from aiogram.filters import Command
@@ -19,13 +15,19 @@ from aiogram.types import CallbackQuery, Message
 
 from src.bot.keyboards import (
     admin_external_grade_keyboard,
+    admin_group_detail_keyboard,
+    admin_groups_list_keyboard,
     admin_main_keyboard,
+    admin_passwords_keyboard,
+    admin_tier_keyboard,
     cancel_keyboard,
     firebase_keyboard,
     main_menu_keyboard,
 )
 from src.bot.states import (
     AdminAuthStates,
+    AdminGroupStates,
+    AdminSettingsStates,
     AdminSolverStates,
 )
 from src.config import settings
@@ -43,11 +45,11 @@ router = Router(name="admin")
 # ==============================================================
 
 def _is_admin(session: UserSession) -> bool:
-    owner_ok = bool(getattr(settings, "admin_id", None)) and session.user_id == settings.admin_id
-    return bool(session.is_admin or owner_ok)
+    return session.is_admin or session.user_id == settings.admin_id
 
 
 async def _require_admin(event, session: UserSession) -> bool:
+    """Reject non-admin access. Returns True if allowed."""
     if _is_admin(session):
         return True
     msg = "⛔ هذا القسم للمشرفين فقط."
@@ -62,13 +64,14 @@ async def _require_admin(event, session: UserSession) -> bool:
 
 
 # ==============================================================
-# Entry / auth
+# Entry
 # ==============================================================
 
 @router.message(Command("admin"))
 async def cmd_admin(message: Message, state: FSMContext, session: UserSession) -> None:
+    """Prompt for admin password (always)."""
     await state.clear()
-    session.is_admin = False
+    session.is_admin = False  # require fresh auth each time
 
     await message.answer(
         "🔐 *لوحة الأدمن*\n"
@@ -84,7 +87,7 @@ async def cmd_admin(message: Message, state: FSMContext, session: UserSession) -
 async def cb_admin_panel(callback: CallbackQuery, state: FSMContext, session: UserSession) -> None:
     await callback.answer()
     await state.clear()
-    session.is_admin = False
+    session.is_admin = False  # force re-auth
 
     await callback.message.edit_text(
         "🔐 *لوحة الأدمن*\n"
@@ -100,8 +103,10 @@ async def cb_admin_panel(callback: CallbackQuery, state: FSMContext, session: Us
 async def process_admin_password(
     message: Message, state: FSMContext, session: UserSession
 ) -> None:
+    """Validate password (hashed), delete message, show dashboard."""
     entered = (message.text or "").strip()
 
+    # Always delete the password message
     try:
         await message.delete()
     except Exception:
@@ -111,13 +116,19 @@ async def process_admin_password(
         await message.answer("⚠️ أرسل كلمة المرور:", reply_markup=cancel_keyboard())
         return
 
-    owner_ok = bool(getattr(settings, "admin_id", None)) and session.user_id == settings.admin_id
-    valid = owner_ok or subscriptions_repo.verify_by_password(entered)
+    # Check: either matches a subscription group password OR the admin's own ID
+    valid = False
+    if session.user_id == settings.admin_id:
+        valid = True  # owner always allowed
+    else:
+        # Check against any subscription group password
+        if subscriptions_repo.verify_by_password(entered):
+            valid = True
 
     if not valid:
         log.warning("admin_password_rejected", user_id=session.user_id)
         await message.answer(
-            "❌ *كلمة المرور غير صحيحة.*\nحاول مرة أخرى:",
+            "❌ *كلمة المرور غير صحيحة.*\nحاول مجدداً:",
             reply_markup=cancel_keyboard(),
             parse_mode="Markdown",
         )
@@ -138,12 +149,8 @@ async def _show_dashboard(target, session: UserSession) -> None:
     total_members = sum(g.members_count for g in groups)
     total_capacity = sum(g.max_users for g in groups)
 
-    try:
-        from src.db.firebase.client import firebase_client
-        fb = firebase_client.health()
-        fb_text = "متصل" if fb["connected"] else "محلي"
-    except Exception:
-        fb_text = "محلي"
+    from src.db.firebase.client import firebase_client
+    fb = firebase_client.health()
 
     text = (
         "👑 *لوحة الأدمن*\n"
@@ -151,7 +158,7 @@ async def _show_dashboard(target, session: UserSession) -> None:
         f"📦 باقات: *{len(groups)}*\n"
         f"👥 مشتركون: *{total_members}*\n"
         f"🎯 سعة كلية: *{total_capacity}*\n"
-        f"🔥 Firebase: *{fb_text}*\n"
+        f"🔥 Firebase: *{'متصل' if fb['connected'] else 'محلي'}*\n"
         "━━━━━━━━━━━━━━━━━━━━"
     )
 
@@ -172,7 +179,247 @@ async def cb_admin_home(callback: CallbackQuery, session: UserSession) -> None:
 
 
 # ==============================================================
-# Admin passwords management
+# Subscription groups — list / create / view / toggle / delete
+# ==============================================================
+
+@router.callback_query(F.data == "admin:group:list")
+async def cb_groups_list(callback: CallbackQuery, session: UserSession) -> None:
+    await callback.answer()
+    if not await _require_admin(callback, session):
+        return
+
+    groups = subscriptions_repo.list_groups()
+    if not groups:
+        await callback.message.edit_text(
+            "📋 *لا توجد باقات بعد.*\nاضغط *➕ باقة جديدة* للبدء.",
+            reply_markup=admin_groups_list_keyboard([]),
+            parse_mode="Markdown",
+        )
+        return
+
+    await callback.message.edit_text(
+        f"📋 *الباقات ({len(groups)})*\nاختر باقة لعرض التفاصيل:",
+        reply_markup=admin_groups_list_keyboard(groups),
+        parse_mode="Markdown",
+    )
+
+
+@router.callback_query(F.data == "admin:group:create")
+async def cb_create_group(callback: CallbackQuery, state: FSMContext, session: UserSession) -> None:
+    await callback.answer()
+    if not await _require_admin(callback, session):
+        return
+
+    await callback.message.edit_text(
+        "📦 *باقة جديدة*\nاختر السعة:",
+        reply_markup=admin_tier_keyboard(),
+        parse_mode="Markdown",
+    )
+    await state.set_state(AdminGroupStates.waiting_tier)
+
+
+@router.callback_query(F.data.startswith("tier:"))
+async def cb_pick_tier(callback: CallbackQuery, state: FSMContext, session: UserSession) -> None:
+    await callback.answer()
+    if not await _require_admin(callback, session):
+        return
+
+    choice = callback.data.split(":", 1)[1]
+    if choice == "custom":
+        await callback.message.edit_text(
+            "🔢 *أرسل السعة المطلوبة* (عدد صحيح > 0):",
+            reply_markup=cancel_keyboard(),
+            parse_mode="Markdown",
+        )
+        await state.set_state(AdminGroupStates.waiting_custom_limit)
+        return
+
+    tier_map = {
+        "15": ("باقة 15 عميل", 15),
+        "25": ("الباقة الفضية", 25),
+        "40": ("الباقة الذهبية", 40),
+        "60": ("الباقة الماسية", 60),
+    }
+    tier_name, max_users = tier_map.get(choice, ("باقة", 25))
+    await state.update_data(tier_name=tier_name, max_users=max_users)
+
+    await callback.message.edit_text(
+        f"✅ *{tier_name}* ({max_users} عميل)\n\n"
+        f"🆔 أرسل *معرف الباقة* (مثل: `GRP1`):",
+        reply_markup=cancel_keyboard(),
+        parse_mode="Markdown",
+    )
+    await state.set_state(AdminGroupStates.waiting_group_id)
+
+
+@router.message(AdminGroupStates.waiting_custom_limit)
+async def process_custom_limit(message: Message, state: FSMContext, session: UserSession) -> None:
+    if not _is_admin(session):
+        return
+    txt = (message.text or "").strip()
+    if not txt.isdigit() or int(txt) <= 0:
+        await message.answer("⚠️ أرسل رقماً صحيحاً:", reply_markup=cancel_keyboard())
+        return
+
+    max_users = int(txt)
+    await state.update_data(tier_name=f"باقة {max_users} عميل", max_users=max_users)
+    await message.answer(
+        f"✅ السعة: {max_users}\n\n🆔 أرسل *معرف الباقة*:",
+        reply_markup=cancel_keyboard(),
+        parse_mode="Markdown",
+    )
+    await state.set_state(AdminGroupStates.waiting_group_id)
+
+
+@router.message(AdminGroupStates.waiting_group_id)
+async def process_group_id(message: Message, state: FSMContext, session: UserSession) -> None:
+    if not _is_admin(session):
+        return
+    gid = (message.text or "").strip().replace(" ", "_")
+    if not gid:
+        await message.answer("⚠️ أرسل معرفاً غير فارغ:", reply_markup=cancel_keyboard())
+        return
+
+    await state.update_data(group_id=gid)
+    await message.answer(
+        f"🆔 الباقة: `{gid}`\n\n🔑 أرسل *كلمة المرور* للعملاء:",
+        reply_markup=cancel_keyboard(),
+        parse_mode="Markdown",
+    )
+    await state.set_state(AdminGroupStates.waiting_group_password)
+
+
+@router.message(AdminGroupStates.waiting_group_password)
+async def process_group_password(message: Message, state: FSMContext, session: UserSession) -> None:
+    if not _is_admin(session):
+        return
+    password = (message.text or "").strip()
+    try:
+        await message.delete()
+    except Exception:
+        pass
+
+    if not password:
+        await message.answer("⚠️ أرسل كلمة مرور غير فارغة:", reply_markup=cancel_keyboard())
+        return
+
+    data = await state.get_data()
+    await state.clear()
+
+    group_id = data.get("group_id", "GRP")
+    tier_name = data.get("tier_name", "باقة")
+    max_users = data.get("max_users", 25)
+
+    subscriptions_repo.create_group(group_id, password, tier_name, max_users)
+    log.info("group_created", group_id=group_id, max_users=max_users)
+
+    await message.answer(
+        f"🎉 *تم إنشاء الباقة!*\n"
+        f"━━━━━━━━━━━━━━━━━━━━\n"
+        f"🏷️ {tier_name}\n"
+        f"🆔 `{group_id}`\n"
+        f"🔑 `{password}`\n"
+        f"👥 {max_users} عميل\n"
+        f"━━━━━━━━━━━━━━━━━━━━\n"
+        f"📋 *رسالة للعملاء:*\n"
+        f"```\n"
+        f"أهلاً بك في بوت كيريو ⚡\n"
+        f"أرسل الباسورد التالي للبوت:\n"
+        f"🔑 {password}\n"
+        f"```",
+        reply_markup=admin_main_keyboard(),
+        parse_mode="Markdown",
+    )
+
+
+@router.callback_query(F.data.startswith("admin:group:view:"))
+async def cb_group_view(callback: CallbackQuery, session: UserSession) -> None:
+    await callback.answer()
+    if not await _require_admin(callback, session):
+        return
+
+    gid = callback.data.split(":", 3)[3]
+    g = subscriptions_repo.get_group(gid)
+    if not g:
+        await callback.answer("الباقة غير موجودة", show_alert=True)
+        return
+
+    status = "🟢 نشطة" if g.is_active else "🔴 معطلة"
+    text = (
+        f"📦 *{g.tier_name}*\n"
+        f"━━━━━━━━━━━━━━━━━━━━\n"
+        f"🆔 `{g.group_id}`\n"
+        f"👥 {g.members_count}/{g.max_users}\n"
+        f"✅ مكتمل: {g.completed_count}\n"
+        f"🔐 الباسورد: `🔒 مخفي`\n"
+        f"⚡ {status}\n"
+        f"━━━━━━━━━━━━━━━━━━━━"
+    )
+    await callback.message.edit_text(
+        text,
+        reply_markup=admin_group_detail_keyboard(gid, g.is_active),
+        parse_mode="Markdown",
+    )
+
+
+@router.callback_query(F.data.startswith("admin:group:show_pass:"))
+async def cb_group_show_pass(callback: CallbackQuery, session: UserSession) -> None:
+    if not await _require_admin(callback, session):
+        return
+    gid = callback.data.split(":", 3)[3]
+    g = subscriptions_repo.get_group(gid)
+    if not g:
+        await callback.answer("غير موجودة", show_alert=True)
+        return
+    # Passwords are hashed — can't show them. Show a reminder instead.
+    await callback.answer(
+        f"🔐 كلمة المرور مشفرة ولا يمكن استرجاعها.\n"
+        f"لإعادة تعيينها: احذف الباقة وأنشئ واحدة جديدة.",
+        show_alert=True,
+    )
+
+
+@router.callback_query(F.data.startswith("admin:group:toggle:"))
+async def cb_group_toggle(callback: CallbackQuery, session: UserSession) -> None:
+    await callback.answer()
+    if not await _require_admin(callback, session):
+        return
+    gid = callback.data.split(":", 3)[3]
+    g = subscriptions_repo.get_group(gid)
+    if not g:
+        return
+    # Update DB
+    from src.db.connection import get_conn
+    from datetime import datetime, timezone
+    with get_conn() as conn:
+        conn.execute(
+            "UPDATE subscription_groups SET is_active = ? WHERE group_id = ?",
+            (0 if g.is_active else 1, gid),
+        )
+        conn.commit()
+    await cb_group_view(callback, session)
+
+
+@router.callback_query(F.data.startswith("admin:group:delete:"))
+async def cb_group_delete(callback: CallbackQuery, session: UserSession) -> None:
+    await callback.answer()
+    if not await _require_admin(callback, session):
+        return
+    gid = callback.data.split(":", 3)[3]
+    from src.db.connection import get_conn
+    with get_conn() as conn:
+        conn.execute("DELETE FROM subscription_groups WHERE group_id = ?", (gid,))
+        conn.execute("DELETE FROM group_members WHERE group_id = ?", (gid,))
+        conn.commit()
+    await callback.message.edit_text(
+        f"🗑️ تم حذف الباقة `{gid}`.",
+        reply_markup=admin_main_keyboard(),
+        parse_mode="Markdown",
+    )
+
+
+# ==============================================================
+# Admin passwords management (own account only)
 # ==============================================================
 
 @router.callback_query(F.data == "admin:passwords")
@@ -181,6 +428,8 @@ async def cb_admin_passwords(callback: CallbackQuery, session: UserSession) -> N
     if not await _require_admin(callback, session):
         return
 
+    # Since we hash passwords now, we can't show them.
+    # We show a management panel instead.
     await callback.message.edit_text(
         "🔒 *إدارة كلمات المرور*\n"
         "━━━━━━━━━━━━━━━━━━━━\n"
@@ -233,6 +482,7 @@ async def cb_firebase_sync(callback: CallbackQuery, session: UserSession) -> Non
     try:
         from src.db.firebase.client import firebase_client
         if firebase_client.is_connected:
+            # Simple sync: all users, groups, answers
             from src.db.connection import fetch_all
             users = fetch_all("SELECT * FROM bot_users")
             for u in users:
@@ -268,6 +518,7 @@ async def cb_analytics(callback: CallbackQuery, session: UserSession) -> None:
 
     from src.db.connection import fetch_one
     from src.services.session_manager import session_manager
+    from src.services.queue_manager import queue_manager
     from src.solver.browser_pool import browser_pool
 
     total_answers = fetch_one("SELECT COUNT(*) as c FROM saved_answers")
@@ -297,7 +548,7 @@ async def cb_analytics(callback: CallbackQuery, session: UserSession) -> None:
 
 
 # ==============================================================
-# External solve
+# External solve (admin solves a student's account)
 # ==============================================================
 
 @router.callback_query(F.data == "admin:external_solve")
@@ -330,7 +581,8 @@ async def cb_external_grade(callback: CallbackQuery, state: FSMContext, session:
     await state.update_data(ext_grade=grade, ext_label=label, ext_course=course)
 
     await callback.message.edit_text(
-        f"✅ *{label}*\n\n👤 أرسل *كود الطالب*:",
+        f"✅ *{label}*\n\n"
+        f"👤 أرسل *كود الطالب*:",
         reply_markup=cancel_keyboard(),
         parse_mode="Markdown",
     )
@@ -354,16 +606,6 @@ async def ext_username(message: Message, state: FSMContext, session: UserSession
     await state.set_state(AdminSolverStates.waiting_password)
 
 
-class _MsgProxy:
-    def __init__(self, bot, chat_id: int):
-        self.bot = bot
-        self.chat = type("Chat", (), {"id": chat_id})()
-        self.message_id = 0
-
-    async def answer(self, text, **kwargs):
-        return await self.bot.send_message(self.chat.id, text, **kwargs)
-
-
 @router.message(AdminSolverStates.waiting_password)
 async def ext_password(message: Message, state: FSMContext, session: UserSession) -> None:
     if not _is_admin(session):
@@ -374,35 +616,19 @@ async def ext_password(message: Message, state: FSMContext, session: UserSession
     except Exception:
         pass
 
-    if not password:
-        await message.answer("⚠️ أرسل كلمة مرور صحيحة:", reply_markup=cancel_keyboard())
-        return
-
     data = await state.get_data()
     await state.clear()
 
     uname = data.get("ext_username", "")
     course = data.get("ext_course", "javascript_ar")
-    grade = data.get("ext_grade", "grade_1")
 
-    digest = hashlib.sha256(f"{session.user_id}:{uname}".encode()).hexdigest()
-    temp_user_id = -(int(digest[:12], 16) % 10_000_000 + 1)
+    await message.answer("🔄 *جاري الدخول وبدء الحل...*", parse_mode="Markdown")
 
-    try:
-        old = None
-        if hasattr(session_manager, "get_cached"):
-            old = session_manager.get_cached(temp_user_id)
-        if old and getattr(old, "qureo_client", None):
-            try:
-                await old.qureo_client.stop()
-            except Exception:
-                pass
-        await session_manager.remove(temp_user_id)
-    except Exception:
-        pass
-
+    # Create a temporary isolated client for this external account
+    # Use a distinct negative ID to avoid clashing with real users
+    temp_user_id = -1 * (session.user_id + abs(hash(uname)) % 100000)
     temp_session = await session_manager.get(temp_user_id)
-    temp_session.grade = grade
+    temp_session.grade = data.get("ext_grade", "grade_1")
     temp_session.course_url = f"{settings.qureo_base_url}/course/{course}"
 
     client = QureoClient(user_id=temp_user_id)
@@ -411,38 +637,25 @@ async def ext_password(message: Message, state: FSMContext, session: UserSession
         if not ok:
             await message.answer(f"❌ فشل الدخول: {msg}")
             await client.stop()
-            try:
-                await session_manager.remove(temp_user_id)
-            except Exception:
-                pass
+            await session_manager.remove(temp_user_id)
             return
 
         temp_session.qureo_client = client
         temp_session.is_logged_in = True
         temp_session.username = uname
 
-        await message.answer("🔄 *جاري الدخول وبدء الحل...*", parse_mode="Markdown")
-
+        # Start solver for the temp session
         from src.services.queue_manager import queue_manager
         from src.bot.handlers.solving import _run_solver
-
-        chat_id = message.chat.id
-        bot = message.bot
-        proxy = _MsgProxy(bot, chat_id)
-
-        async def _runner():
-            await _run_solver(proxy, temp_session)
-
-        await queue_manager.submit(temp_user_id, _runner, name="ext_solve")
-
+        await queue_manager.submit(
+            temp_user_id,
+            lambda: _run_solver(message, temp_session),
+            name="ext_solve",
+        )
     except Exception as e:
         log.exception("ext_solve_failed", error=str(e))
         try:
             await client.stop()
-        except Exception:
-            pass
-        try:
-            await session_manager.remove(temp_user_id)
         except Exception:
             pass
         await message.answer(f"❌ خطأ: `{str(e)[:200]}`", parse_mode="Markdown")

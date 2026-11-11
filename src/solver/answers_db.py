@@ -86,8 +86,8 @@ class AnswersDB:
         self._init_db()
         self.firebase = None
         try:
-            from config import Config
-            from solver.firebase_db import FirebaseManager
+            from src.config import Config
+            from src.solver.firebase_db import FirebaseManager
             self.firebase = FirebaseManager(cred_path=getattr(Config, "FIREBASE_CREDENTIALS_PATH", None))
         except Exception as e:
             logger.warning(f"تعذر تهيئة FirebaseManager في AnswersDB: {e}")

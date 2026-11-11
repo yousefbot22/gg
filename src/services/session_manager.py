@@ -45,12 +45,6 @@ class UserSession:
     lock: asyncio.Lock = field(default_factory=asyncio.Lock)
     last_seen: float = field(default_factory=time.monotonic)
 
-    # ✅ حقول جديدة لدعم SPX والإشعارات
-    full_name: str = "—"
-    spx_logged_in: bool = False
-    spx_auth_state: str | None = None     # "awaiting_username" | "awaiting_password"
-    spx_login_id: str | None = None
-
     def touch(self) -> None:
         self.last_seen = time.monotonic()
 
@@ -65,11 +59,7 @@ class UserSession:
         for client in (self.qureo_client, self.spx_client):
             if client is not None:
                 try:
-                    # SPXClient يستخدم close_browser بدلاً من stop
-                    if hasattr(client, "close_browser"):
-                        await client.close_browser()
-                    elif hasattr(client, "stop"):
-                        await client.stop()
+                    await client.stop()
                 except Exception as e:
                     log.warning("client_cleanup_failed", error=str(e))
         self.qureo_client = None
@@ -79,9 +69,6 @@ class UserSession:
         self.is_logged_in = False
         self.username = None
         self.password = None
-        self.spx_logged_in = False
-        self.spx_auth_state = None
-        self.spx_login_id = None
 
 
 class SessionManager:
@@ -100,6 +87,7 @@ class SessionManager:
             return session
 
         async with self._global:
+            # Double-check after acquiring lock
             if user_id in self._sessions:
                 return self._sessions[user_id]
             if len(self._sessions) >= MAX_SESSIONS:

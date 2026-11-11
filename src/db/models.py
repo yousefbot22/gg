@@ -62,20 +62,6 @@ class SubscriptionGroup:
     members_count: int = 0
     completed_count: int = 0
 
-    # ✅ حقول جديدة لدعم الباسورد لمرة واحدة
-    is_one_time: bool = False
-    used_by_user_id: int | None = None
-    used_at: datetime | None = None
-
-    @property
-    def remaining_seats(self) -> int:
-        return max(0, self.max_users - self.completed_count)
-
-    @property
-    def is_consumed(self) -> bool:
-        """هل الباسورد استُهلك (للمرة الواحدة فقط)."""
-        return self.is_one_time and self.used_by_user_id is not None
-
 
 @dataclass(slots=True)
 class GroupMember:
@@ -106,4 +92,3 @@ class FinancialQuestion:
     source: str = "user_training"
     confidence: float = 1.0
     created_at: datetime | None = None
-    Group = SubscriptionGroup
