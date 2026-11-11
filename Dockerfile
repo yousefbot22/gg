@@ -1,4 +1,3 @@
-
 FROM --platform=$TARGETPLATFORM python:3.11-slim-bookworm
 
 ENV PYTHONUNBUFFERED=1 \
@@ -10,7 +9,7 @@ ENV PYTHONUNBUFFERED=1 \
 
 WORKDIR /home/container
 
-# System dependencies for Chromium
+# System dependencies for Chromium + Playwright runtime
 RUN apt-get update && apt-get install -y --no-install-recommends \
     bash \
     ca-certificates \
@@ -44,6 +43,19 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libxkbcommon0 \
     libxrandr2 \
     libxshmfence1 \
+    libatomic1 \
+    libstdc++6 \
+    libxcb-shm0 \
+    libxcb-render0 \
+    libxcb-shape0 \
+    libxcb-xfixes0 \
+    libxcb-randr0 \
+    libxcb-image0 \
+    libxcb-keysyms1 \
+    libxcb-icccm4 \
+    libxcb-sync1 \
+    libxcb-xinerama0 \
+    libxcb-cursor0 \
     && rm -rf /var/lib/apt/lists/*
 
 # Create Pterodactyl user
