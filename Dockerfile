@@ -1,83 +1,102 @@
-FROM --platform=$TARGETPLATFORM python:3.11-slim-bookworm
+# ==============================================================
+# Qureo Solution Bot — Production Dockerfile
+# ==============================================================
+# Multi-stage build:
+#   1. builder  — installs Python deps into a venv
+#   2. runtime  — slim image with only runtime deps + venv
+# ==============================================================
+
+FROM python:3.11-slim AS builder
+
+WORKDIR /build
+
+# Install build deps
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        build-essential \
+        curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create venv and install Python deps
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip \
+    && pip install --no-cache-dir -r requirements.txt
+
+
+# ==============================================================
+# Runtime
+# ==============================================================
+
+FROM python:3.11-slim AS runtime
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
-    PLAYWRIGHT_BROWSERS_PATH=/ms-playwright \
-    PLAYWRIGHT_SKIP_BROWSER_GC=1 \
-    USER=container \
-    HOME=/home/container
+    HEADLESS=true \
+    PYTHONPATH=/app \
+    PORT=8080
 
-WORKDIR /home/container
+WORKDIR /app
 
-# System dependencies for Chromium + Playwright runtime
+# Chromium runtime dependencies only (no compilers)
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    bash \
-    ca-certificates \
-    curl \
-    iproute2 \
-    tzdata \
-    fonts-liberation \
-    fonts-noto-color-emoji \
-    fonts-noto-core \
-    libasound2 \
-    libatk1.0-0 \
-    libatk-bridge2.0-0 \
-    libatspi2.0-0 \
-    libcups2 \
-    libdbus-1-3 \
-    libdrm2 \
-    libgbm1 \
-    libglib2.0-0 \
-    libgtk-3-0 \
-    libnspr4 \
-    libnss3 \
-    libpango-1.0-0 \
-    libcairo2 \
-    libfontconfig1 \
-    libx11-6 \
-    libxcb1 \
-    libxcomposite1 \
-    libxdamage1 \
-    libxext6 \
-    libxfixes3 \
-    libxkbcommon0 \
-    libxrandr2 \
-    libxshmfence1 \
-    libatomic1 \
-    libstdc++6 \
-    libxcb-shm0 \
-    libxcb-render0 \
-    libxcb-shape0 \
-    libxcb-xfixes0 \
-    libxcb-randr0 \
-    libxcb-image0 \
-    libxcb-keysyms1 \
-    libxcb-icccm4 \
-    libxcb-sync1 \
-    libxcb-xinerama0 \
-    libxcb-cursor0 \
+        curl \
+        ca-certificates \
+        fonts-liberation \
+        fonts-noto-color-emoji \
+        fonts-noto-core \
+        libnss3 \
+        libatk-bridge2.0-0 \
+        libatk1.0-0 \
+        libatspi2.0-0 \
+        libcups2 \
+        libdbus-1-3 \
+        libdrm2 \
+        libgbm1 \
+        libgtk-3-0 \
+        libnspr4 \
+        libpango-1.0-0 \
+        libx11-6 \
+        libxcb1 \
+        libxcomposite1 \
+        libxdamage1 \
+        libxext6 \
+        libxfixes3 \
+        libxkbcommon0 \
+        libxrandr2 \
+        libxshmfence1 \
+        libasound2 \
+        libpangoft2-1.0-0 \
+        tini \
     && rm -rf /var/lib/apt/lists/*
 
-# Create Pterodactyl user
-RUN useradd -m -d /home/container container
+# Copy venv from builder
+COPY --from=builder /opt/venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
 
-# Install Python packages
-COPY requirements.txt /tmp/requirements.txt
+# Install Playwright Chromium as the app user (before we switch users)
+RUN playwright install --with-deps chromium \
+    && rm -rf /root/.cache/ms-playwright/chromium-*/chrome-linux/meipreload 2>/dev/null || true
 
-RUN python -m pip install --no-cache-dir --upgrade pip \
-    && python -m pip install --no-cache-dir -r /tmp/requirements.txt
+# Create non-root user
+RUN groupadd -r botuser && useradd -r -g botuser -d /app -s /sbin/nologin botuser
 
-# Install Chromium in a shared directory
-RUN mkdir -p /ms-playwright \
-    && python -m playwright install chromium \
-    && chmod -R a+rX /ms-playwright
+# Copy app code
+COPY --chown=botuser:botuser . .
 
-# Pterodactyl entrypoint
-COPY --chmod=755 entrypoint.sh /entrypoint.sh
+# Ensure writable dirs
+RUN mkdir -p /app/data /app/logs /app/screenshots \
+    && chown -R botuser:botuser /app
 
-ENV USER=container
-ENV HOME=/home/container
+USER botuser
 
-WORKDIR /home/container
+EXPOSE 8080
 
-CMD ["/bin/bash", "/entrypoint.sh"]
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD curl -fsS "http://localhost:${PORT}/ping" || exit 1
+
+# Use tini as PID 1 to handle signals correctly
+ENTRYPOINT ["/usr/bin/tini", "--"]
+CMD ["python", "main.py"]
