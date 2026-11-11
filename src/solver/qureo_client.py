@@ -5,9 +5,9 @@ import random
 from pathlib import Path
 from typing import Optional, Dict, Any, Tuple
 from playwright.async_api import async_playwright, Browser, BrowserContext, Page
-from config import Config
-from solver.gemini_solver import GeminiSolver
-from solver.qureo_api import QureoAPI
+from src.config import Config
+from src.solver.gemini_solver import GeminiSolver
+from src.solver.qureo_api import QureoAPI
 
 
 class QureoClient:
